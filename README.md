@@ -1,6 +1,11 @@
-# 📚 Repositorio de notas y material de clase
+# DRIVE CON AUDIOS DE LAS CLASES Y TRANSCRIPCIONES
 
-## 🎯 Propósito del repositorio
+https://drive.google.com/drive/folders/1Q4Q1tX1Ml4JPJtA_yucEixfVEnMhRRFN?usp=drive_link
+
+## 📚 Repositorio de notas y material de clase
+
+### 🎯 Propósito del repositorio
+
 
 Este repositorio tiene como objetivo **recopilar, organizar y compartir material de apoyo elaborado por los estudiantes durante las clases**, con el fin de facilitar el estudio, la consulta y el repaso de los temas vistos durante el curso.
 
