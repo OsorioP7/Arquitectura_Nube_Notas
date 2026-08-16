@@ -1,0 +1,1279 @@
+<title>Simulacro Nube y Distribuidos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#E8EAEE; --surface:#FCFCFD; --surface-2:#F1F3F6;
+  --ink:#14181F; --ink-2:#4A525E; --ink-3:#79828F;
+  --line:#C9CFD8; --line-2:#DFE3E9;
+  --accent:#A85D0B; --accent-soft:#F6E7D2; --on-accent:#FFFFFF;
+  --ok:#1F6B4A; --ok-soft:#DCEFE4;
+  --bad:#A8342A; --bad-soft:#F7E0DD;
+  --mid:#8A6D1F; --mid-soft:#F5EDD4;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10141A; --surface:#171C24; --surface-2:#1E242E;
+    --ink:#E6E9EE; --ink-2:#98A2B0; --ink-3:#6E7885;
+    --line:#2A323D; --line-2:#222933;
+    --accent:#E39B4A; --accent-soft:#3A2A16; --on-accent:#10141A;
+    --ok:#4FA97C; --ok-soft:#17301F;
+    --bad:#E0705F; --bad-soft:#331A18;
+    --mid:#D3B24E; --mid-soft:#302713;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10141A; --surface:#171C24; --surface-2:#1E242E;
+  --ink:#E6E9EE; --ink-2:#98A2B0; --ink-3:#6E7885;
+  --line:#2A323D; --line-2:#222933;
+  --accent:#E39B4A; --accent-soft:#3A2A16; --on-accent:#10141A;
+  --ok:#4FA97C; --ok-soft:#17301F;
+  --bad:#E0705F; --bad-soft:#331A18;
+  --mid:#D3B24E; --mid-soft:#302713;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--serif); font-size:17px; line-height:1.6;
+  -webkit-text-size-adjust:100%;
+}
+.rail{position:fixed;top:0;left:0;right:0;height:3px;background:var(--line-2);z-index:20}
+.rail>i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s ease}
+.wrap{max-width:44rem;margin:0 auto;padding:3rem 1.25rem 5rem}
+.mono{font-family:var(--mono)}
+h1{font-family:var(--mono);font-size:1.6rem;font-weight:600;letter-spacing:-.02em;margin:0 0 .4rem;text-wrap:balance}
+h2{font-family:var(--mono);font-size:1.05rem;font-weight:600;margin:0 0 .9rem;letter-spacing:-.01em}
+p{margin:0 0 1rem}
+.lede{color:var(--ink-2);margin-bottom:2rem}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.5rem}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1.4rem}
+.stack{display:flex;flex-direction:column;gap:1.25rem}
+
+button{font:inherit;cursor:pointer}
+.btn{
+  font-family:var(--mono);font-size:.9rem;padding:.7rem 1.3rem;border-radius:3px;
+  border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);
+}
+.btn-ghost{background:transparent;color:var(--ink-2);border-color:var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.opts{display:flex;flex-direction:column;gap:.55rem;margin:1.2rem 0 0}
+.opt{
+  display:flex;gap:.8rem;align-items:flex-start;text-align:left;width:100%;
+  background:var(--surface-2);border:1px solid var(--line-2);border-radius:3px;
+  padding:.75rem .9rem;color:var(--ink);font-family:var(--serif);font-size:1rem;line-height:1.45;
+}
+.opt:hover{border-color:var(--accent)}
+.opt .k{font-family:var(--mono);font-size:.78rem;color:var(--ink-3);padding-top:.15rem;min-width:1.1rem}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .k{color:var(--accent)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.opt.ok .k{color:var(--ok)}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt.bad .k{color:var(--bad)}
+
+textarea{
+  width:100%;min-height:7rem;font-family:var(--serif);font-size:1rem;line-height:1.5;
+  background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
+  border-radius:3px;padding:.8rem;resize:vertical;margin-top:1rem;
+}
+
+.meta{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.78rem;color:var(--ink-3);margin-bottom:1.4rem}
+.tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:.1rem .4rem}
+.q{font-size:1.12rem;line-height:1.55;margin:0}
+.q code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);padding:.1em .35em;border-radius:2px}
+
+.reveal{margin-top:1.3rem;border-left:2px solid var(--accent);padding:.2rem 0 .2rem 1rem}
+.reveal h3{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 .5rem;font-weight:600}
+.reveal p{margin:0 0 .7rem;color:var(--ink-2);font-size:.98rem}
+.reveal ul{margin:.2rem 0 .8rem;padding-left:1.1rem;color:var(--ink-2);font-size:.98rem}
+.reveal li{margin-bottom:.3rem}
+
+.grade{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}
+.grade button{font-family:var(--mono);font-size:.8rem;padding:.45rem .85rem;border-radius:3px;background:transparent;border:1px solid var(--line);color:var(--ink-2)}
+.grade button[data-g="1"]:hover,.grade button[data-g="1"].on{border-color:var(--ok);color:var(--ok);background:var(--ok-soft)}
+.grade button[data-g="0.5"]:hover,.grade button[data-g="0.5"].on{border-color:var(--mid);color:var(--mid);background:var(--mid-soft)}
+.grade button[data-g="0"]:hover,.grade button[data-g="0"].on{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
+
+.nav{display:flex;justify-content:space-between;gap:.75rem;margin-top:1.6rem}
+
+.score{font-family:var(--mono);font-size:3.4rem;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.score small{font-size:1rem;color:var(--ink-3);font-weight:400}
+
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+.tscroll{overflow-x:auto}
+th{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);text-align:left;font-weight:600;padding:0 .6rem .5rem 0;border-bottom:1px solid var(--line)}
+td{padding:.6rem .6rem .6rem 0;border-bottom:1px solid var(--line-2);vertical-align:middle}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.bar{height:6px;background:var(--line-2);border-radius:3px;overflow:hidden;min-width:5rem}
+.bar>i{display:block;height:100%;background:var(--accent)}
+.bar.g>i{background:var(--ok)} .bar.r>i{background:var(--bad)} .bar.y>i{background:var(--mid)}
+
+.rev{border-top:1px solid var(--line);padding-top:1.1rem;margin-top:1.1rem}
+.rev:first-child{border-top:0;padding-top:0;margin-top:0}
+.rev .qq{font-size:1rem;margin:.4rem 0 .6rem}
+.you{font-family:var(--mono);font-size:.85rem;color:var(--bad);margin:0 0 .25rem}
+.right{font-family:var(--mono);font-size:.85rem;color:var(--ok);margin:0 0 .5rem}
+.why{color:var(--ink-2);font-size:.96rem;margin:0}
+
+.toggles{display:flex;flex-direction:column;gap:.6rem;margin:1.4rem 0}
+label.sw{display:flex;gap:.65rem;align-items:flex-start;font-size:.95rem;color:var(--ink-2);cursor:pointer}
+label.sw input{margin-top:.35rem;accent-color:var(--accent)}
+.hist{font-family:var(--mono);font-size:.8rem;color:var(--ink-3);margin-top:1.5rem;font-variant-numeric:tabular-nums}
+.hidden{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="rail"><i id="rail"></i></div>
+<div class="wrap">
+
+<section id="start">
+  <div class="eyebrow">Arquitecturas de Nube y Sistemas Distribuidos</div>
+  <h1>Simulacro Parcial 1</h1>
+  <p class="lede">Banco de <b id="bankn">210</b> preguntas. Cada intento arma un examen distinto de 70, mezcla los tipos y reordena las opciones. Repetirlo no es memorizar posiciones.</p>
+
+  <div class="card">
+    <h2>Configuración</h2>
+    <div class="toggles">
+      <label class="sw"><input type="checkbox" id="mFeedback"> <span><b>Modo estudio</b> — muestra si acertaste y por qué después de cada pregunta. Sin marcar, es modo examen: solo ves el resultado al final.</span></label>
+      <label class="sw"><input type="checkbox" id="mFallos" checked> <span><b>Insistir en lo que fallo</b> — las preguntas que ya erré tienen más probabilidad de volver a salir.</span></label>
+    </div>
+    <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+      <span class="mono" style="font-size:.85rem;color:var(--ink-3)">Preguntas:</span>
+      <select id="nq" class="mono" style="font:inherit;font-family:var(--mono);font-size:.85rem;padding:.4rem;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:3px">
+        <option value="70" selected>70 (parcial completo)</option>
+        <option value="30">30 (repaso rápido)</option>
+        <option value="15">15 (calentamiento)</option>
+        <option value="210">210 (banco entero)</option>
+      </select>
+      <button class="btn" id="go">Empezar</button>
+    </div>
+    <div class="hist" id="hist"></div>
+  </div>
+
+  <p class="lede" style="margin-top:1.5rem;font-size:.9rem">Las abiertas se autocalifican: escribes tu respuesta, se revela la respuesta modelo con los puntos clave, y tú decides si la tuya cubría el punto. Sé duro contigo.</p>
+</section>
+
+<section id="quiz" class="hidden">
+  <div class="meta">
+    <span><span id="qn">1</span>/<span id="qt">70</span> · <span class="tag" id="qtag">SD</span></span>
+    <span id="clock">00:00</span>
+  </div>
+  <div class="card">
+    <p class="q" id="qtext"></p>
+    <div id="qbody"></div>
+    <div id="qreveal"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-ghost" id="prev">← Anterior</button>
+    <button class="btn" id="next">Siguiente →</button>
+  </div>
+</section>
+
+<section id="results" class="hidden"></section>
+
+</div>
+
+<script>
+const BANK = [
+
+// ─── SISTEMAS DISTRIBUIDOS ───────────────────────────────────────────
+{t:"sd",k:"mc",q:"Una empresa tiene un servidor web potente al que se conectan 8.000 usuarios simultáneos desde todo el país. El administrador afirma que eso ya es un sistema distribuido “porque hay miles de máquinas involucradas”. ¿Qué le falta al montaje para serlo?",
+ o:["Que el servicio mismo se ejecute repartido en varios nodos autónomos que se coordinan por mensajes","Que los usuarios estén en ciudades distintas","Que el servidor tenga más de un procesador","Que la conexión sea por Internet y no por LAN"],a:0,
+ e:"Lo distribuido no lo dan los clientes sino el servicio. 8.000 clientes contra un servidor es un sistema centralizado con muchos clientes. Para ser distribuido, el servicio tiene que correr en varias máquinas autónomas que se presenten como un solo sistema coherente."},
+
+{t:"sd",k:"mc",q:"Tu servicio de pedidos llama al servicio de facturación y la llamada expira por timeout. ¿Qué puedes afirmar con certeza sobre la factura?",
+ o:["Nada: pudo generarse y perderse la respuesta, o no haberse generado nunca","Que no se generó, porque no hubo respuesta","Que se generó, porque el mensaje sí salió","Que se generó a medias y quedó corrupta"],a:0,
+ e:"Es la consecuencia de fallas independientes. El silencio tiene tres causas indistinguibles desde afuera: el nodo cayó, el nodo está vivo pero lento, o se cortó la red. El error típico es asumir que sin respuesta no hubo ejecución: pudo ejecutarse perfecto y perderse solo la respuesta de vuelta."},
+
+{t:"sd",k:"vf",q:"Si una operación remota no devuelve respuesta, se puede asumir con seguridad que no se ejecutó en el servidor.",a:false,
+ e:"Falso, y es de los errores más castigados. La petición pudo llegar, ejecutarse completa, y perderse la respuesta de regreso. Por eso los reintentos ciegos son peligrosos y se diseñan operaciones idempotentes o con clave de idempotencia."},
+
+{t:"sd",k:"mc",q:"Dos nodos registran un cambio sobre el mismo dato: el nodo A a las 10:00:05 y el nodo B a las 10:00:03, según sus relojes locales. El sistema resuelve el conflicto quedándose con la hora más alta. ¿Qué riesgo tiene esa decisión?",
+ o:["Si el reloj de B está atrasado, el cambio realmente posterior fue el de B y se descarta trabajo real","Ninguno, la hora más alta siempre es el evento más reciente","Solo falla si los dos nodos están en países distintos","Solo falla si se usa IPv4 en vez de IPv6"],a:0,
+ e:"Carencia de reloj global: cada nodo tiene su propio oscilador y se desvía por su lado. Con relojes desincronizados, la hora de pared no ordena eventos de máquinas distintas. Se resuelve con relojes lógicos (Lamport, vectores de versión), que registran causalidad, no tiempo."},
+
+{t:"sd",k:"vf",q:"Sincronizar todos los nodos con NTP elimina el problema de la carencia de reloj global.",a:false,
+ e:"Falso. NTP reduce la desviación a unos pocos milisegundos, pero nunca la elimina y sigue habiendo incertidumbre: el mensaje con la hora tarda un tiempo desconocido y variable en llegar. Para eventos separados por microsegundos, confiar en la hora de pared sigue produciendo decisiones incorrectas."},
+
+{t:"sd",k:"ab",q:"Explica por qué en un sistema distribuido “no existe un estado global perceptible”, y por qué no basta con preguntarle a todos los nodos al mismo tiempo.",
+ p:["No hay reloj global, así que “al mismo tiempo” no está bien definido entre nodos","Las respuestas llegan en momentos distintos por la latencia variable de la red","Cuando el último nodo contesta, lo que dijo el primero ya cambió","El estado global que reconstruyes nunca existió realmente en ningún instante","Es corolario de las 4 consecuencias, no una quinta consecuencia independiente"],
+ e:"Nunca puedes tomarle una foto al sistema completo. Para conocer el estado global tendrías que preguntarle a todos los nodos, pero cada respuesta viaja por la red con una latencia distinta y desconocida, y no hay reloj común que defina un instante compartido. Cuando el nodo 5 contesta, lo que reportó el nodo 1 ya cambió. El resultado es una foto compuesta de instantes distintos: un estado que nunca existió realmente. Es el corolario que sale de las cuatro consecuencias juntas."},
+
+{t:"sd",k:"ms",q:"Selecciona TODAS las que son consecuencias directas de distribuir un sistema, según el curso.",
+ o:["Carencia de reloj global","Fallas independientes (parciales)","Ausencia de memoria compartida","Concurrencia","Latencia cero entre nodos","Administración centralizada obligatoria"],a:[0,1,2,3],
+ e:"Las cuatro consecuencias son: carencia de reloj global, fallas independientes, ausencia de memoria compartida y concurrencia. De ellas sale el corolario de que no hay estado global perceptible. La latencia cero es justo lo contrario: es una falacia de Deutsch."},
+
+{t:"sd",k:"mc",q:"Una tienda tiene dos servidores atendiendo pedidos. Cada uno guarda en su memoria que quedan 5 unidades de un producto. Llegan dos compras simultáneas de 5 unidades, una a cada servidor: ambos consultan su copia, ven 5 y aprueban. Se vendieron 10 unidades de un inventario de 5. ¿Qué consecuencia se manifestó?",
+ o:["Ausencia de memoria compartida: cada nodo trabajó sobre una copia que podía estar desactualizada","Carencia de reloj global: los dos pedidos tenían la misma hora","Fallas independientes: uno de los servidores estaba caído","Heterogeneidad: los servidores usaban sistemas operativos distintos"],a:0,
+ e:"Nada de lo que un nodo escribe en su RAM es visible para otro. Todo dato “compartido” entre máquinas es en realidad una copia, y toda copia puede estar desactualizada. Se enfrenta con una única fuente de verdad (base de datos transaccional) o con consenso."},
+
+{t:"sd",k:"vf",q:"La “memoria compartida distribuida” es una abstracción de software que simula memoria común pasando mensajes por debajo, y por tanto no elimina el problema de la ausencia de memoria compartida.",a:true,
+ e:"Verdadero. La abstracción existe y es útil, pero paga el costo de la red en cada acceso. Confundirla con memoria compartida real es el error típico de esa consecuencia."},
+
+{t:"sd",k:"mc",q:"Dos usuarios retiran $80 cada uno de la misma cuenta con saldo $100, al mismo tiempo y atendidos por nodos distintos. Ambos nodos verifican saldo, ambos ven $100, ambos aprueban. La cuenta queda en -$60. ¿Qué consecuencia es y cómo se enfrenta?",
+ o:["Concurrencia: con exclusión mutua distribuida, transacciones o bloqueos coordinados","Fallas parciales: con timeouts y reintentos","Carencia de reloj global: con NTP en los dos nodos","Heterogeneidad: estandarizando el sistema operativo"],a:0,
+ e:"Todos los procesos se ejecutan a la vez sin un orden global que los organice, así que aparecen condiciones de carrera difíciles de reproducir. Se enfrenta con exclusión mutua distribuida, transacciones y bloqueos coordinados."},
+
+{t:"sd",k:"mc",q:"Un compañero dice que un sistema distribuido es fuertemente acoplado “porque los nodos están muy conectados entre sí”. ¿Qué le respondes?",
+ o:["Es al revés: son débilmente acoplados, porque cada nodo tiene su memoria y se comunican por red","Tiene razón, la red los acopla fuertemente","Depende de si usan TCP o UDP","Depende de si están en la misma LAN"],a:0,
+ e:"Trampa clásica de examen. Fuertemente acoplado = memoria compartida y bus interno, con T_comm < T_proc. Débilmente acoplado = memoria distribuida y red, con T_comm >> T_proc. Los sistemas distribuidos son débilmente acoplados, y esa independencia es justo lo que les permite escalar y tolerar fallas."},
+
+{t:"sd",k:"mc",q:"Clasifica según Flynn: una GPU aplicando el mismo filtro de brillo a los 2 millones de píxeles de una imagen.",
+ o:["SIMD","SISD","MISD","MIMD"],a:0,
+ e:"SIMD (Single Instruction, Multiple Data): una misma instrucción aplicada simultáneamente a muchos datos. La operación “suma 10” es una sola; los datos son millones. Por eso las GPU sirven tan bien para gráficos y redes neuronales."},
+
+{t:"sd",k:"mc",q:"Clasifica según Flynn: un clúster de 50 servidores donde cada uno atiende peticiones web distintas de usuarios distintos.",
+ o:["MIMD, y débilmente acoplado","SIMD, y fuertemente acoplado","MISD, y débilmente acoplado","SISD, porque cada servidor es secuencial"],a:0,
+ e:"MIMD: procesadores distintos ejecutando programas distintos sobre datos distintos. Ahí caen los sistemas distribuidos. Al ser un clúster (multicomputador, memoria distribuida, red estándar), es débilmente acoplado."},
+
+{t:"sd",k:"mc",q:"¿Cuál es la categoría de Flynn que casi no tiene ejemplos prácticos y se cita en sistemas de altísima confiabilidad, donde varios procesadores calculan lo mismo de formas distintas para comparar resultados?",
+ o:["MISD","SIMD","MIMD","SISD"],a:0,
+ e:"MISD (Multiple Instruction, Single Data): varias instrucciones distintas sobre el mismo dato. Es la categoría rara; el ejemplo típico es el control de vuelo redundante. En examen basta saber que es la rara y por qué."},
+
+{t:"sd",k:"ms",q:"Selecciona TODAS las características de un sistema DÉBILMENTE acoplado.",
+ o:["Memoria distribuida, cada nodo la suya","Conexión por red","Retraso de mensajes alto","Conviene minimizar el volumen de datos intercambiado","Comunicación a velocidad de memoria","Los procesadores comparten un bus interno"],a:[0,1,2,3],
+ e:"Débilmente acoplado: memoria distribuida, red, retraso alto, poco volumen de intercambio (conviene minimizarlo), y es donde viven los sistemas distribuidos. Velocidad de memoria y bus interno son del fuertemente acoplado (multiprocesadores)."},
+
+{t:"sd",k:"mc",q:"Dentro de MIMD, ¿qué distingue a un multiprocesador de un multicomputador?",
+ o:["El multiprocesador comparte memoria física; el multicomputador tiene memoria propia por nodo y se comunica por red","El multiprocesador tiene más núcleos","El multicomputador solo existe en la nube","El multiprocesador es SIMD y el multicomputador MIMD"],a:0,
+ e:"MIMD se parte según cómo se comunican los procesadores. Multiprocesadores: memoria compartida (UMA si todos tardan lo mismo, NUMA si hay memoria cercana y lejana). Multicomputadores: memoria distribuida, comunicación por red (MPP con red dedicada, o clústeres con red estándar)."},
+
+{t:"sd",k:"mc",q:"En un sistema NUMA, ¿qué significa que el acceso a memoria sea “no uniforme”?",
+ o:["Cada procesador tiene memoria cercana (rápida) y memoria lejana (lenta)","Cada procesador tiene una cantidad distinta de memoria","La memoria se reparte por red entre nodos","La memoria cambia de tamaño según la carga"],a:0,
+ e:"NUMA (Non-Uniform Memory Access): el tiempo de acceso depende de qué posición de memoria se toque. En UMA (Uniform Memory Access) todos los procesadores tardan lo mismo en llegar a cualquier posición."},
+
+{t:"sd",k:"ab",q:"Un desarrollador escribe una pantalla que, por cada uno de los 100 productos que muestra, hace una llamada al servicio de precios. En su máquina tarda 50 ms; en producción tarda 4 segundos. ¿Qué falacia de Deutsch cometió y por qué se dice que “el código no tiene ningún error”?",
+ p:["Es la falacia “la latencia es cero” (la segunda)","En local la llamada cuesta casi nada, así que el patrón no se nota","En producción cada llamada cuesta ~40 ms y son 100 llamadas: 4 segundos","El código es funcionalmente correcto; lo que está mal es la suposición sobre la red","Se corrige agrupando las 100 llamadas en una sola (batch)"],
+ e:"Cometió la falacia número 2: la latencia es cero. Programar en una sola máquina acostumbra a que la comunicación sea instantánea, y ese hábito se convierte en un error de diseño al pasar a la red. El código no tiene un bug: hace exactamente lo que dice, devuelve los datos correctos y pasaría cualquier prueba unitaria. Lo que está equivocado es la suposición implícita de que una llamada remota cuesta lo mismo que una local. Con 40 ms de latencia por llamada, 100 llamadas son 4 segundos inevitables. La solución no es optimizar el código sino cambiar el patrón: pedir los 100 precios en una sola llamada."},
+
+{t:"sd",k:"ms",q:"Selecciona TODAS las que son falacias de la computación distribuida de Peter Deutsch.",
+ o:["La red es confiable","La latencia es cero","El ancho de banda es infinito","La red es segura","La topología no cambia","La red es heterogénea"],a:[0,1,2,3,4],
+ e:"Las ocho son: red confiable, latencia cero, ancho de banda infinito, red segura, topología fija, un solo administrador, transporte gratis y red HOMOGÉNEA. La falacia es creer que la red es homogénea; en la realidad sí es heterogénea, así que “la red es heterogénea” no es una falacia sino un hecho."},
+
+{t:"sd",k:"mc",q:"Un equipo quema las direcciones IP de los servidores directamente en el código. Seis meses después mueven un servidor de datacenter y la aplicación deja de funcionar. ¿Qué falacia cometieron?",
+ o:["La topología de la red no cambia","La red es confiable","El ancho de banda es infinito","Hay un solo administrador"],a:0,
+ e:"Falacia 5: la topología no cambia. Las direcciones y rutas cambian con el tiempo. La forma correcta es usar nombres resueltos por DNS o descubrimiento de servicios, que agregan la capa de indirección que permite mover infraestructura sin tocar código."},
+
+{t:"sd",k:"mc",q:"Un arquitecto diseña un sistema asumiendo que puede coordinar un cambio simultáneo en todos los servicios porque “nosotros controlamos todo”. En la práctica, tres de los servicios pertenecen a otras empresas. ¿Qué falacia es?",
+ o:["Hay un solo administrador","La red es segura","La latencia es cero","El transporte es gratis"],a:0,
+ e:"Falacia 6: hay un solo administrador. Asumes que alguien puede cambiarlo todo a la vez, cuando en realidad hay que coordinar equipos y hasta empresas distintas, con sus propios calendarios y políticas. Es también la dimensión administrativa de la escalabilidad."},
+
+{t:"sd",k:"mc",q:"Un servicio en la nube mueve 3 TB al mes entre regiones y llega una factura inesperada por transferencia de datos. ¿Qué falacia se ignoró?",
+ o:["El costo de transporte es cero","El ancho de banda es infinito","La red es confiable","La red es homogénea"],a:0,
+ e:"Falacia 7: el transporte es gratis. Serializar y mover datos cuesta CPU y cuesta dinero real: las nubes cobran por transferencia, sobre todo por la salida. Se relaciona directo con el vendor lock-in."},
+
+{t:"sd",k:"vf",q:"En examen, para las falacias de Deutsch suele bastar con recitar la lista de las ocho.",a:false,
+ e:"Falso. El error típico es memorizar las ocho sin poder explicar ninguna. Casi siempre piden explicar el EFECTO de una falacia concreta: qué se rompe en el sistema si el programador la cree."},
+
+{t:"sd",k:"mc",q:"Abres un archivo que está en un servidor de red usando exactamente el mismo código con el que abrirías uno de tu disco local. ¿Qué tipo de transparencia es?",
+ o:["De acceso","De ubicación","De migración","De persistencia"],a:0,
+ e:"Transparencia de acceso: oculta que el recurso sea local o remoto, se usa igual. No confundir con la de ubicación, que oculta DÓNDE está. Puedes tener una sin la otra."},
+
+{t:"sd",k:"mc",q:"Estás viendo una película y el servicio cambia el servidor que te la envía sin que la reproducción se corte. ¿Qué transparencia es?",
+ o:["De reubicación","De migración","De replicación","De fallo"],a:0,
+ e:"Reubicación: el recurso se mueve MIENTRAS lo estás usando. La de migración es que se mueva entre usos (tu buzón cambia de servidor y te enteras la próxima vez que entras). La reubicación es bastante más difícil de lograr."},
+
+{t:"sd",k:"ab",q:"Explica la diferencia entre transparencia de migración y de reubicación, con un ejemplo propio de cada una.",
+ p:["Migración: el recurso se mueve ENTRE usos","Reubicación: el recurso se mueve DURANTE el uso, sin cortar la sesión","Ejemplo de migración: tu buzón de correo cambia de servidor y no te enteras","Ejemplo de reubicación: sigues viendo la película mientras cambia el servidor que la envía","La reubicación es técnicamente más difícil porque hay que trasladar estado en vivo"],
+ e:"Las dos ocultan que el recurso cambió de lugar; lo que cambia es CUÁNDO. La transparencia de migración oculta un movimiento que ocurre entre usos: tu buzón de correo se traslada a otro servidor durante la noche y al día siguiente entras igual, sin notar nada, porque nadie lo estaba usando en el momento del traslado. La de reubicación oculta un movimiento que ocurre durante el uso: estás viendo una película y el servicio cambia el servidor que te la está enviando sin que la reproducción se corte ni tengas que volver a empezar. La reubicación es más difícil porque hay que mover el estado de una sesión viva sin que el cliente perciba el corte."},
+
+{t:"sd",k:"ms",q:"Selecciona TODOS los tipos de transparencia que reconoce el curso.",
+ o:["Acceso","Ubicación","Migración","Reubicación","Replicación","Escalabilidad"],a:[0,1,2,3,4],
+ e:"Los ocho tipos son: acceso, ubicación, migración, reubicación, replicación, concurrencia, fallo y persistencia. La escalabilidad es una meta de diseño, no un tipo de transparencia."},
+
+{t:"sd",k:"mc",q:"Pides una imagen a una CDN y no sabes cuál de las 40 copias distribuidas por el mundo te la entregó. ¿Qué transparencia es?",
+ o:["De replicación","De ubicación","De acceso","De concurrencia"],a:0,
+ e:"Replicación: oculta que existan varias copias del recurso. La de ubicación oculta dónde está; la de replicación oculta cuántas hay."},
+
+{t:"sd",k:"vf",q:"Cuanta más transparencia tenga un sistema distribuido, siempre mejor.",a:false,
+ e:"Falso, y es un error conceptual frecuente. Ocultar completamente la distribución tiene un costo, y a veces conviene que el programador SEPA que una llamada es remota, justamente para tratarla con cuidado (timeouts, reintentos, manejo de fallo). Ocultarlo del todo lleva directo a la primera falacia de Deutsch."},
+
+{t:"sd",k:"mc",q:"Un nodo muere, otro toma su lugar y el usuario nunca ve un error. La redundancia y los reintentos que lo hicieron posible son el MECANISMO. ¿Cómo se llama el RESULTADO de que el usuario no lo perciba?",
+ o:["Transparencia de fallo","Tolerancia a fallas","Disponibilidad","Reconfiguración"],a:0,
+ e:"Contraste que se pregunta: la tolerancia a fallas es el mecanismo (redundancia, reintentos, réplicas); la transparencia de fallo es el resultado percibido de que el usuario no note nada."},
+
+{t:"sd",k:"ms",q:"Selecciona TODAS las que son metas de diseño de un sistema distribuido según el curso.",
+ o:["Heterogeneidad","Openness (apertura)","Seguridad","Escalabilidad","Manejo de fallas","Carencia de reloj global"],a:[0,1,2,3,4],
+ e:"Las metas de diseño son: heterogeneidad, openness, seguridad, escalabilidad, manejo de fallas, concurrencia y transparencia. La carencia de reloj global no es una meta sino una CONSECUENCIA de distribuir: no se busca, se sufre."},
+
+{t:"sd",k:"mc",q:"Un servicio escrito en Java le pide datos a uno escrito en Python mandando JSON por HTTP, y ninguno sabe en qué lenguaje está el otro. ¿Qué meta de diseño se está cumpliendo y cómo se logra?",
+ o:["Heterogeneidad, mediante protocolos y formatos de datos acordados","Openness, mediante código abierto","Transparencia de acceso, mediante RPC","Escalabilidad, mediante particionamiento"],a:0,
+ e:"Heterogeneidad: funcionar sobre componentes distintos (hardware, SO, lenguaje, red). Se logra con protocolos y formatos acordados que ambos lados entiendan (HTTP, JSON, gRPC) y con middleware que traduce. Ningún sistema real se construye de una sola vez con máquinas idénticas."},
+
+{t:"sd",k:"mc",q:"Cualquier servidor que implemente el protocolo DNS puede reemplazar al que tienes hoy, porque la interfaz es pública y estándar. ¿Qué meta de diseño ilustra eso, y cómo se consigue?",
+ o:["Openness, publicando las interfaces","Heterogeneidad, usando el mismo lenguaje","Seguridad, cifrando el tráfico","Transparencia de replicación, con caché"],a:0,
+ e:"Openness (apertura): que el sistema se pueda extender y reimplementar sin rehacerlo todo. Se logra publicando las interfaces: si el contrato está documentado y es estable, cualquiera puede escribir otra implementación que lo cumpla. Sin eso, el sistema queda amarrado a un solo proveedor."},
+
+{t:"sd",k:"ms",q:"El curso divide la escalabilidad en tres dimensiones. Selecciónalas TODAS.",
+ o:["En tamaño (más usuarios y recursos)","Geográfica (nodos más lejos entre sí)","Administrativa (más organizaciones involucradas)","Vertical (más CPU y RAM)","Temporal (más horas de operación)"],a:[0,1,2],
+ e:"Las tres dimensiones son tamaño, geográfica y administrativa. Vertical y horizontal son formas de ESCALAR (atributo no funcional), no dimensiones de la escalabilidad en la clasificación del curso."},
+
+{t:"sd",k:"mc",q:"Una empresa agrega 10 veces más servidores para soportar 10 veces más usuarios, y el rendimiento apenas mejora. ¿Cuál es la explicación más probable?",
+ o:["Hay un componente central (una base de datos, un servidor, una tabla) que se satura y limita todo","Los servidores nuevos son de otra marca","Falta aumentar la RAM de cada servidor","La red usa IPv4 en vez de IPv6"],a:0,
+ e:"Crecer introduce cuellos de botella. Si todo pasa por un componente central, ese componente se satura y el sistema deja de escalar por más máquinas que agregues. Las tres técnicas del curso atacan eso: ocultar latencias, ocultar la distribución con particionamiento, y ocultar la replicación con caché."},
+
+{t:"sd",k:"ms",q:"Selecciona las TRES técnicas de escalabilidad que enseña el curso.",
+ o:["Ocultar latencias (trabajar de forma asíncrona)","Ocultar la distribución mediante particionamiento","Ocultar la replicación mediante caché","Aumentar la RAM del servidor principal","Reducir el número de usuarios simultáneos"],a:[0,1,2],
+ e:"Las tres son: ocultar latencias (no quedarse esperando la respuesta), ocultar la distribución mediante particionamiento (cada nodo atiende solo su parte, como DNS con sus zonas), y ocultar la replicación mediante caché (copias cerca de quien las usa, como una CDN)."},
+
+{t:"sd",k:"mc",q:"Una CDN pone copias de las imágenes de un sitio en servidores de cada país, para que el usuario de Tokio no cruce el océano por cada foto. ¿Qué técnica de escalabilidad es?",
+ o:["Ocultar la replicación mediante caché","Ocultar la distribución mediante particionamiento","Ocultar latencias trabajando asíncronamente","Escalado vertical"],a:0,
+ e:"Caché: mantener copias cerca de quien las consume para no ir hasta el origen cada vez. DNS usa las otras dos: particionamiento (cada servidor sabe solo de su zona) y caché (guarda respuestas un tiempo)."},
+
+{t:"sd",k:"mc",q:"¿Cuál de estas afirmaciones distingue correctamente escalabilidad de elasticidad?",
+ o:["La escalabilidad es la capacidad de crecer sin degradarse; la elasticidad es que el ajuste sea automático y en ambos sentidos","La elasticidad es crecer y la escalabilidad es decrecer","Son sinónimos, cambia solo el proveedor que los usa","La escalabilidad es de la nube y la elasticidad es de los sistemas distribuidos"],a:0,
+ e:"Escalabilidad = capacidad de crecer sin degradarse, puede ser manual, y es propiedad de cualquier arquitectura. Elasticidad = ajuste automático y bidireccional según demanda, y es característica propia de la nube. Regla rápida: toda nube elástica es escalable, pero no todo sistema escalable es elástico."},
+
+{t:"sd",k:"ms",q:"El manejo de fallas (dependability) se descompone en cuatro tareas concretas. Selecciónalas TODAS.",
+ o:["Detectar la falla","Enmascararla","Tolerarla","Recuperarse","Prevenirla eliminando la red"],a:[0,1,2,3],
+ e:"Detectar (heartbeats, timeouts), enmascarar (reintentar contra una réplica), tolerar (seguir dando servicio aunque sea degradado) y recuperarse (volver al estado bueno). Todo se apoya fundamentalmente en redundancia."},
+
+{t:"sd",k:"mc",q:"Netflix con el servidor de recomendaciones caído no muestra un error: muestra una lista genérica. ¿Qué tarea del manejo de fallas ilustra mejor?",
+ o:["Tolerar la falla: sigue dando servicio, aunque degradado","Detectar la falla","Recuperarse de la falla","Prevenir la falla"],a:0,
+ e:"Degradó el servicio en vez de negarlo: eso es tolerar la falla, no solo detectarla. Detectarla es darse cuenta; tolerarla es seguir operando útilmente sin ella; recuperarse es volver al estado bueno cuando el componente regresa."},
+
+{t:"sd",k:"vf",q:"La redundancia es el mecanismo fundamental con el que se logra el manejo de fallas.",a:true,
+ e:"Verdadero. Tener más de una copia de todo lo que importa es lo que permite que la caída de un componente no detenga el servicio. Sin redundancia no hay enmascaramiento ni tolerancia posible."},
+
+{t:"sd",k:"ms",q:"Selecciona TODOS los que el curso lista como retos de los sistemas distribuidos.",
+ o:["Comunicación entre procesos","Coordinación","Naming","Tolerancia a fallas","Compilación cruzada","Overclocking del procesador"],a:[0,1,2,3],
+ e:"Los retos son: comunicación entre procesos, coordinación, concurrencia, naming, datos (consistencia y replicación), tolerancia a fallas y seguridad. Cada reto es la forma práctica que toma alguna de las cuatro consecuencias."},
+
+{t:"sd",k:"mc",q:"El reto de “naming” en sistemas distribuidos consiste en:",
+ o:["Localizar un recurso sin saber en qué máquina está; DNS es el ejemplo clásico","Ponerle nombres únicos a las variables del código","Estandarizar los nombres de los servidores por convención","Traducir los nombres de usuario a identificadores numéricos"],a:0,
+ e:"Naming es cómo se localiza un recurso sin conocer su ubicación física. DNS es el ejemplo canónico: pides google.com sin saber ni importarte en qué datacenter está. Se relaciona directo con la transparencia de ubicación."},
+
+{t:"sd",k:"mc",q:"¿Por qué la seguridad pesa más en un sistema distribuido que en uno centralizado?",
+ o:["Porque los mensajes viajan por una red que otros pueden leer o alterar, y la superficie de ataque crece","Porque los sistemas distribuidos usan contraseñas más débiles","Porque no se puede cifrar el tráfico entre nodos","Porque los usuarios son más numerosos"],a:0,
+ e:"En un sistema centralizado los datos no salen de la máquina. Al distribuir, cada mensaje atraviesa una red donde alguien puede escucharlo, modificarlo o suplantarte. Se enfrenta con cifrado en tránsito (TLS), autenticación de ambos extremos y control de acceso (AAA)."},
+
+{t:"sd",k:"mc",q:"¿Qué caracteriza al enfoque de comunicación por PASO DE MENSAJES frente a RPC?",
+ o:["Es explícito: se ve que hay una red de por medio, un proceso envía y otro recibe","Es más rápido porque no usa la red","Solo funciona dentro de una misma máquina","Garantiza la entrega de todos los mensajes"],a:0,
+ e:"El paso de mensajes es lo más básico y lo más honesto: la red es visible en el código. RPC, en cambio, hace que invocar una función remota se vea igual que una local: da transparencia de acceso, pero esconde que puede tardar o fallar, y ahí muerden las falacias de Deutsch."},
+
+{t:"sd",k:"vf",q:"RPC da transparencia de acceso, pero justamente por eso puede inducir a los programadores a ignorar que la llamada puede tardar o fallar.",a:true,
+ e:"Verdadero. Es el mejor ejemplo de por qué más transparencia no siempre es mejor: al hacer que una llamada remota parezca local, RPC invita a cometer la falacia de latencia cero y la de red confiable."},
+
+{t:"sd",k:"mc",q:"Para mantener varias réplicas sincronizadas, ¿qué modelo de comunicación se usa?",
+ o:["Comunicación grupal (multicast): un emisor, varios receptores","Par a par (punto a punto): un emisor, un receptor","RPC síncrono uno a uno","Paso de mensajes con confirmación individual obligatoria"],a:0,
+ e:"La comunicación grupal o multicast es un emisor y varios receptores, y es justo lo que se necesita para propagar un cambio a todas las réplicas a la vez. Par a par es un emisor y un receptor."},
+
+{t:"sd",k:"mc",q:"Según la definición del curso, una arquitectura de software queda definida por:",
+ o:["Los componentes, las relaciones entre ellos y con el entorno, y los principios que guían su diseño","El lenguaje de programación y el framework elegidos","La cantidad de servidores y su ubicación física","El diagrama de base de datos y sus tablas"],a:0,
+ e:"Es la organización fundamental del sistema: componentes, relaciones (entre sí y con el entorno) y principios que guían su diseño. Se describe por sus propiedades estructurales: la organización lógica y física de los componentes y cómo interactúan."},
+
+{t:"sd",k:"vf",q:"La arquitectura es un detalle de implementación que puede corregirse fácilmente más adelante si se eligió mal.",a:false,
+ e:"Falso. Se decide al principio y fija de antemano qué tan fácil será escalar, tolerar fallas y evolucionar el sistema. Elegir mal la arquitectura es una deuda que se paga durante todo el proyecto, no un bug que se parcha."},
+
+{t:"sd",k:"mc",q:"¿Qué define al estilo cliente-servidor, más allá de cuántas máquinas haya de cada lado?",
+ o:["La relación asimétrica de roles: la iniciativa es siempre del cliente","Que haya exactamente un servidor físico","Que el cliente sea un navegador web","Que la conexión sea siempre confiable (TCP)"],a:0,
+ e:"Lo distintivo es la asimetría: el cliente solicita y el servidor procesa y responde, nunca al revés. Puede haber un clúster entero detrás de un balanceador y sigue siendo cliente-servidor. El transporte puede ser confiable (TCP) o no confiable (UDP); eso no define el estilo."},
+
+{t:"sd",k:"mc",q:"Un compañero afirma que HTTP es un protocolo simétrico “porque cliente y servidor se mandan datos los dos”. ¿Cómo se resuelve la discusión?",
+ o:["Con una sola pregunta: ¿puede cualquiera de los dos INICIAR la comunicación? En HTTP solo el cliente puede","Contando cuántos bytes manda cada lado","Verificando si usa TCP o UDP","Mirando si la respuesta trae cuerpo o solo cabeceras"],a:0,
+ e:"La simetría de un protocolo se prueba por quién puede iniciar. En HTTP el servidor solo responde a lo que ya le preguntaron; nunca abre la conversación. Por eso HTTP es asimétrico, aunque ambos lados transmitan datos."},
+
+{t:"sd",k:"ms",q:"Selecciona TODAS las que son desventajas propias del estilo cliente-servidor.",
+ o:["Punto único de falla (SPOF)","Escalabilidad limitada por el punto central","Administración sencilla","Fácil localización de fallas"],a:[0,1],
+ e:"Ventajas: administración sencilla (datos y lógica en un solo lugar) y fácil localización de fallas (si algo falla, casi siempre es el servidor). Desventajas: punto único de falla y escalabilidad limitada, porque todos los clientes dependen del mismo punto central."},
+
+{t:"sd",k:"ab",q:"Un sistema de e-commerce llama hoy directamente desde el servicio de pedidos a los de inventario, facturación y correos. Cada vez que se agrega un servicio nuevo hay que modificar el código del servicio de pedidos. ¿Qué estilo arquitectónico resuelve el problema y qué dos tipos de desacoplamiento aporta?",
+ p:["Publish-subscribe (arquitectura orientada a eventos)","El servicio de pedidos publica un evento (por ejemplo pedido_creado) y los demás se suscriben","Desacoplamiento referencial: nadie necesita la dirección del otro, solo conocen al broker","Desacoplamiento temporal: no necesitan estar activos al mismo tiempo; el broker entrega después","Agregar un cuarto servicio no requiere tocar el código del que publica"],
+ e:"La solución es publish-subscribe. El servicio de pedidos deja de llamar a nadie y simplemente publica el evento pedido_creado; inventario, facturación y correos se suscriben a ese evento y reaccionan por su cuenta. Aporta dos desacoplamientos, que es lo más preguntable del tema. El referencial: ni el publicador ni los suscriptores necesitan la dirección del otro ni saber que el otro existe, porque ambos solo hablan con el broker. El temporal: no necesitan estar activos al mismo tiempo, ya que el publicador puede emitir aunque el suscriptor esté apagado y el broker entrega cuando vuelva, si el sistema conserva los eventos en una cola. El resultado concreto es que agregar un servicio de puntos de fidelidad mañana no obliga a tocar una sola línea del servicio de pedidos."},
+
+{t:"sd",k:"mc",q:"En publish-subscribe, el DESACOPLAMIENTO TEMPORAL significa que:",
+ o:["Publicador y suscriptor no necesitan estar activos al mismo tiempo","El evento tiene una marca de tiempo que ordena los mensajes","Los eventos se entregan siempre en menos de un segundo","El broker sincroniza los relojes de todos los participantes"],a:0,
+ e:"Temporal = no coincidir en el tiempo. El publicador emite aunque el suscriptor esté apagado, y el broker entrega cuando reconecta (si conserva los eventos en cola). El referencial, en cambio, es no necesitar la dirección ni conocer la existencia del otro."},
+
+{t:"sd",k:"mc",q:"Una cola de mensajes como RabbitMQ, donde los mensajes esperan hasta que un consumidor los procesa, es la implementación concreta de:",
+ o:["El desacoplamiento temporal de publish-subscribe","La transparencia de replicación","El patrón request-reply de cliente-servidor","La comunicación punto a punto síncrona"],a:0,
+ e:"La cola guarda el mensaje hasta que alguien lo consuma: eso es exactamente el desacoplamiento temporal funcionando. Publicador y consumidor nunca tienen que coincidir en el tiempo."},
+
+{t:"sd",k:"ms",q:"Selecciona TODAS las afirmaciones correctas sobre la comparación entre publish-subscribe y WebSocket.",
+ o:["Pub-sub es un estilo arquitectónico; WebSocket es un protocolo de transporte","En pub-sub nadie conoce a nadie directamente, solo al broker","WebSocket es simétrico una vez abierta la conexión","Son la misma cosa porque ninguno es request-reply","WebSocket requiere obligatoriamente un broker"],a:[0,1,2],
+ e:"Uno es un patrón de organización de todo un sistema (quién sabe de quién) y el otro es un protocolo entre dos puntos concretos que ya se conocen. De hecho se combinan: un broker puede usar WebSocket para empujarle un evento en vivo a un navegador suscrito."},
+
+{t:"sd",k:"mc",q:"¿Por qué WebSocket es la excepción a la regla de que HTTP es asimétrico?",
+ o:["Arranca como petición HTTP pero pide Upgrade; una vez abierta, cualquiera de los dos lados manda datos cuando quiera","Porque usa UDP en vez de TCP","Porque el servidor inicia la conexión sin que el cliente pregunte","Porque no usa puertos 80 ni 443"],a:0,
+ e:"WebSocket empieza como una petición HTTP normal iniciada por el cliente, pero pide actualizar el protocolo (Upgrade: websocket). Aceptada la actualización, la conexión queda abierta y se vuelve simétrica: se usa cuando la asimetría de cliente-servidor puro se queda corta, como en un chat en vivo o cotizaciones en tiempo real."},
+
+{t:"sd",k:"mc",q:"Un compañero dice que <code>DELETE /pedidos/5</code> no es idempotente “porque sí tiene un efecto: borra el pedido”. ¿Está en lo correcto?",
+ o:["No: idempotencia habla del resultado de REPETIR, no de si algo cambia. Borrar algo ya borrado deja el mismo estado final","Sí: cualquier operación con efecto secundario no es idempotente","Sí, salvo que el servidor devuelva 404 en el segundo intento","Depende de si el pedido existía antes"],a:0,
+ e:"Error típico: creer que idempotente significa “sin efectos secundarios”. DELETE sí tiene un efecto real, y aun así es idempotente porque el estado final es “no existe”, sea la primera o la quinta vez que lo llames."},
+
+{t:"sd",k:"ms",q:"Selecciona TODOS los métodos HTTP que son idempotentes.",
+ o:["GET","PUT","DELETE","POST"],a:[0,1,2],
+ e:"GET solo lee. PUT reemplaza el recurso por un valor fijo. DELETE deja el estado final en “no existe”. POST NO es idempotente: crea un recurso nuevo en cada llamada, así que reenviarlo crea dos pedidos o dos cobros. PATCH depende: idempotente si fija un valor, no idempotente si incrementa."},
+
+{t:"sd",k:"mc",q:"El navegador se congela justo después de mandar <code>POST /pagos</code> y no sabes si se cobró. ¿Cuál es la solución que usan los sistemas de pago reales?",
+ o:["Enviar una clave de idempotencia única que el servidor recuerda, para que un reintento no duplique el cobro","Reenviar el POST hasta obtener respuesta","Cambiar el método a GET","Aumentar el timeout del cliente"],a:0,
+ e:"POST no es idempotente, así que reintentar a ciegas puede cobrar dos veces. La clave de idempotencia es un identificador único de transacción que el servidor guarda: si llega un reintento con la misma clave, reconoce que ya lo procesó y no lo repite."},
+
+{t:"sd",k:"mc",q:"¿Por qué la idempotencia es especialmente importante en sistemas distribuidos?",
+ o:["Porque ante un timeout no sabes si la operación se ejecutó, y solo es seguro reintentar si repetir no cambia el resultado","Porque reduce la latencia de la red","Porque permite prescindir de la base de datos","Porque garantiza el orden de los mensajes"],a:0,
+ e:"Conecta directo con las fallas parciales. Como no puedes distinguir “no se ejecutó” de “se ejecutó y se perdió la respuesta”, el diseño idempotente es lo que vuelve seguro el reintento."},
+
+{t:"sd",k:"mc",q:"Cliente-servidor y publish-subscribe: ¿cuál es la lectura correcta de la comparación?",
+ o:["Son herramientas para problemas distintos: cliente-servidor cuando la respuesta se necesita ya; pub-sub cuando hay muchos interesados en un mismo evento","Pub-sub es siempre superior porque escala más","Cliente-servidor es siempre superior porque es más simple","Son equivalentes y la elección es solo cuestión de gusto"],a:0,
+ e:"Error típico: creer que uno es mejor en general. Cliente-servidor es más simple y más fácil de razonar cuando se necesita la respuesta de inmediato (login, cargar una página). Pub-sub brilla cuando muchos deben reaccionar al mismo evento y conviene no acoplarlos."},
+
+{t:"sd",k:"vf",q:"En publish-subscribe el punto único de falla desaparece por completo.",a:false,
+ e:"Falso. Se reduce, pero se traslada al broker: si el broker no es redundante, sigue siendo un punto único de falla. Además se pierde la simplicidad de depurar, porque seguir un flujo asíncrono a través de un broker exige trazas."},
+
+{t:"sd",k:"mc",q:"¿Por qué depurar un sistema publish-subscribe es más difícil que uno cliente-servidor?",
+ o:["Porque el flujo es asíncrono y pasa por un broker y varios suscriptores; hacen falta trazas para reconstruir el camino","Porque los brokers no generan logs","Porque los eventos se pierden siempre","Porque no se puede usar HTTP"],a:0,
+ e:"Es la desventaja principal del estilo. Se pierde la simplicidad de “pregunto y me responden ya”, y reconstruir qué pasó exige observabilidad, en particular trazas distribuidas."},
+
+{t:"sd",k:"ab",q:"Un sistema puede estar disponible y aun así no ser confiable. Explica el contraste entre confiabilidad y disponibilidad con un ejemplo de cada caso.",
+ p:["Confiabilidad: los datos transmitidos y almacenados llegan íntegros y correctos","Disponibilidad: proporción del tiempo que el sistema está operativo y responde","Ejemplo de disponible pero poco confiable: responde siempre pero a veces devuelve datos corruptos","Ejemplo de confiable pero poco disponible: los datos siempre son correctos pero el servicio se cae seguido","Son ejes independientes; no se implican mutuamente"],
+ e:"Son dos propiedades independientes que se confunden porque las dos suenan a “el sistema funciona bien”. La disponibilidad es la proporción del tiempo que el servicio está operativo: mide si responde. La confiabilidad es que los datos transmitidos y almacenados lleguen íntegros y correctos: mide si lo que responde es cierto. Un sistema puede estar altamente disponible y ser poco confiable si contesta el cien por ciento de las peticiones pero de vez en cuando devuelve un saldo corrupto por una réplica desactualizada. Y al revés: una base de datos con transacciones estrictas puede ser muy confiable en sus datos y tener baja disponibilidad si se cae varias veces al mes. En un sistema distribuido conviene medirlas por separado porque las técnicas que suben una a veces bajan la otra."},
+
+{t:"sd",k:"ms",q:"Selecciona TODOS los atributos que el curso lista como “otros atributos importantes” de un sistema distribuido.",
+ o:["Tolerancia a fallas","Confiabilidad","Disponibilidad","Reconfiguración","Compilación incremental"],a:[0,1,2,3],
+ e:"Tolerancia a fallas (seguir funcionando pese a fallos parciales), confiabilidad (datos íntegros), disponibilidad (proporción de tiempo operativo) y reconfiguración (acomodar cambios y expansiones, agregar o quitar nodos, sin detener el sistema)."},
+
+{t:"sd",k:"mc",q:"La “reconfiguración” como atributo de un sistema distribuido significa:",
+ o:["Poder acomodar cambios y expansiones, agregando o quitando nodos, sin detener el sistema","Reinstalar el sistema operativo de todos los nodos a la vez","Cambiar la configuración de red del gateway","Reescribir la aplicación para otro lenguaje"],a:0,
+ e:"Es la capacidad de crecer o encoger en caliente. Se apoya en la transparencia (que nadie note el cambio) y habilita la elasticidad cuando el sistema corre en la nube."},
+
+{t:"sd",k:"vf",q:"Una de las ventajas de un sistema distribuido frente a uno centralizado es que la caída de un componente no inutiliza necesariamente el conjunto.",a:true,
+ e:"Verdadero, y es la cara buena de las fallas parciales. La misma propiedad que crea el estado peligroso de “funciona a medias” es la que permite que el sistema siga dando servicio con componentes caídos, si se diseñó para tolerarlo."},
+
+{t:"sd",k:"mc",q:"En la definición del curso, ¿qué significa que los computadores de un sistema distribuido sean AUTÓNOMOS?",
+ o:["Cada nodo tiene su propio procesador, su propia memoria y su propio reloj; ninguno manda sobre el otro por hardware","Que funcionan sin conexión a la red","Que no necesitan administrador","Que se autoconfiguran al arrancar"],a:0,
+ e:"Las dos mitades de la definición importan por igual: autónomas (procesador, memoria y reloj propios) y que se presenten como un solo sistema coherente. De la autonomía salen las cuatro consecuencias; de la coherencia sale la necesidad de transparencia."},
+
+{t:"sd",k:"mc",q:"Un usuario nota que “son muchas máquinas” cada vez que usa un sistema distribuido: a veces ve una respuesta vieja, a veces una IP distinta, a veces un error de un nodo. Según la definición del curso, eso significa que:",
+ o:["El sistema distribuido está mal hecho, porque debería presentarse como un solo sistema coherente","Es normal e inevitable en cualquier sistema distribuido","El sistema es en realidad centralizado","Falta aumentar el ancho de banda"],a:0,
+ e:"La segunda mitad de la definición es que el usuario no debería notar que son muchas máquinas. Si lo nota, faltó transparencia. Eso no significa que sea fácil de lograr, pero sí que es el objetivo contra el cual se mide el diseño."},
+
+{t:"sd",k:"ab",q:"Nombra las cuatro consecuencias de distribuir un sistema y explica, para UNA de ellas, por qué obliga a programar distinto que en una sola máquina.",
+ p:["Carencia de reloj global","Fallas independientes o parciales","Ausencia de memoria compartida","Concurrencia","Explicación concreta de al menos una, con el cambio que impone en el diseño"],
+ e:"Las cuatro son: carencia de reloj global, fallas independientes, ausencia de memoria compartida y concurrencia. Tomando las fallas independientes como ejemplo: en una máquina sola el sistema funciona o no funciona, es binario, y basta con manejar excepciones locales. Al distribuir aparece un tercer estado, funciona a medias, y además resulta imposible distinguir desde afuera entre un nodo caído, un nodo vivo pero lento y una red cortada, porque las tres se ven como silencio. Eso obliga a programar con timeouts explícitos, reintentos y operaciones idempotentes, cosas que en un programa de una sola máquina simplemente no existen."},
+
+// ─── COMPUTACIÓN EN LA NUBE ──────────────────────────────────────────
+{t:"nube",k:"mc",q:"Una empresa compró servidores y los puso en su oficina. Cada vez que un equipo necesita una máquina virtual debe abrir un ticket y esperar tres días de aprobaciones. La empresa dice que tiene “nube privada”. ¿Qué falla?",
+ o:["Falta el auto-servicio por demanda: si interviene una persona del proveedor, no es nube","Nada, es nube privada correcta","Falta que esté conectada a Internet","Falta que use máquinas virtuales en vez de físicas"],a:0,
+ e:"Las 5 características son el criterio para decidir si algo ES nube. Si falta alguna, no lo es. Aquí falta la primera: el usuario debe aprovisionar recursos sin que intervenga ninguna persona del proveedor. Un ticket de tres días es exactamente el modelo que la nube vino a reemplazar."},
+
+{t:"nube",k:"ms",q:"Selecciona las CINCO características esenciales de la computación en la nube según NIST.",
+ o:["Auto-servicio por demanda","Acceso ubicuo a la red","Agrupación de recursos (pooling)","Rápida elasticidad","Medición del servicio","Acceso exclusivo al hardware físico"],a:[0,1,2,3,4],
+ e:"Las cinco son: auto-servicio por demanda, acceso ubicuo a la red, agrupación de recursos, rápida elasticidad y medición del servicio. El acceso exclusivo al hardware es lo contrario del pooling, que es justamente multi-tenancy."},
+
+{t:"nube",k:"vf",q:"“Estar en la nube” significa esencialmente “estar accesible por Internet”.",a:false,
+ e:"Falso. Una nube privada puede estar dentro de la propia empresa y sin salir a Internet, y sigue siendo nube. Lo que define a la nube es el modelo de consumo: autoservicio, elasticidad y medición, no el cable por donde viaja."},
+
+{t:"nube",k:"mc",q:"¿Cuál es el problema de fondo que la computación en la nube vino a resolver?",
+ o:["Tener que adivinar cuánta capacidad se va a necesitar, antes de necesitarla","Que los servidores físicos consuman electricidad","Que los programadores no sepan administrar Linux","Que Internet sea lento en algunos países"],a:0,
+ e:"Con infraestructura propia, si compras poco tu servicio se cae el día que te va bien; si compras de más, pagaste hardware ocioso el 90 % del tiempo. Y en ambos casos pagaste por adelantado y esperaste semanas. La nube convierte esa apuesta en un ajuste continuo."},
+
+{t:"nube",k:"mc",q:"¿Cómo logra el proveedor de nube que el mismo hardware físico rinda mucho más que si cada empresa tuviera el suyo?",
+ o:["Virtualiza los servidores y los alquila a miles de clientes cuyos picos ocurren en momentos distintos","Usa procesadores más rápidos que los del mercado","Apaga los servidores por la noche","Obliga a los clientes a compartir sus datos"],a:0,
+ e:"Compra hardware a escala enorme, lo virtualiza (parte cada servidor físico en muchas máquinas lógicas) y alquila porciones a miles de clientes. Como los picos no coinciden, la utilización es mucho mayor que la de un datacenter propio ocioso."},
+
+{t:"nube",k:"mc",q:"La agrupación de recursos (pooling) hace la nube barata, pero también es la raíz de su principal desventaja percibida. ¿Cuál?",
+ o:["La sensación de inseguridad por tener datos confidenciales sobre infraestructura compartida","El costo de transferencia de datos","La dependencia del acceso a Internet","El cold start de las funciones"],a:0,
+ e:"El pooling es multi-tenancy: tu máquina virtual y la de otra empresa pueden correr sobre el mismo servidor físico, aisladas y sin saberlo. Eso es lo que abarata, y a la vez lo que genera desconfianza, hasta el punto de que en algunos sectores hay regulación que lo prohíbe."},
+
+{t:"nube",k:"mc",q:"Una regla agrega servidores cuando la CPU supera 70 % y los retira cuando baja de 30 %. De madrugada corren 2 máquinas y al mediodía 20. ¿Qué característica esencial es?",
+ o:["Rápida elasticidad","Auto-servicio por demanda","Medición del servicio","Agrupación de recursos"],a:0,
+ e:"Elasticidad: los recursos crecen y decrecen rápido según la demanda, idealmente de forma automática, y desde la perspectiva del cliente parecen ilimitados. Es la característica que resuelve el problema de adivinar la capacidad: dejas de predecir."},
+
+{t:"nube",k:"vf",q:"Todo sistema escalable es elástico.",a:false,
+ e:"Falso, y la regla va al revés: toda nube elástica es escalable, pero no todo sistema escalable es elástico. La escalabilidad puede ser manual y solo hacia arriba; la elasticidad exige que el ajuste sea automático y bidireccional."},
+
+{t:"nube",k:"mc",q:"AWS cobra las instancias EC2 por segundo de uso y S3 por GB al mes. Si apagas la máquina, deja de cobrarte. ¿Qué característica esencial es, y cuál es su lado peligroso?",
+ o:["Medición del servicio; su lado peligroso es la complejidad de la gestión de costos","Elasticidad; su lado peligroso es el cold start","Pooling; su lado peligroso es la falta de aislamiento","Auto-servicio; su lado peligroso es la falta de aprobaciones"],a:0,
+ e:"Medición del servicio: el uso se monitorea y se factura por consumo real (pay-per-use). Convierte la infraestructura de inversión (CAPEX) en gasto operativo (OPEX). El riesgo es que un recurso olvidado encendido sigue facturando, y las cuentas mal vigiladas se disparan."},
+
+{t:"nube",k:"mc",q:"Una startup quiere lanzar en 6 semanas, tiene 3 desarrolladores y ninguno sabe administrar servidores Linux. ¿Qué modelo de servicio le conviene?",
+ o:["PaaS: aportan solo código y datos; la plataforma pone SO, runtime y escalado","IaaS: control total del entorno","SaaS: software ya hecho y listo para usar","On-premise: máxima seguridad"],a:0,
+ e:"PaaS entrega la plataforma lista y les quita justo el trabajo que no saben hacer ni les da valor. IaaS los obligaría a administrar el SO. SaaS no aplica porque están construyendo su propio producto, no consumiendo uno. On-premise es lo contrario de lo que necesitan."},
+
+{t:"nube",k:"mc",q:"En IaaS, ¿quién es responsable de aplicar un parche de seguridad del sistema operativo?",
+ o:["El cliente","El proveedor","Se aplica automáticamente y nadie es responsable","Depende del modelo de despliegue"],a:0,
+ e:"En IaaS el proveedor pone redes, hardware y virtualización; de ahí para arriba es del cliente: sistema operativo, runtime, datos y aplicación. Justamente eso es lo que te quita el PaaS."},
+
+{t:"nube",k:"ab",q:"Explica en qué se diferencian PaaS y FaaS, cubriendo qué unidad despliegas, qué corre cuando nadie usa el servicio y cómo se cobra cada uno.",
+ p:["PaaS despliega una aplicación completa; FaaS despliega una función suelta","En PaaS la aplicación sigue viva aunque nadie la use; en FaaS no corre nada","PaaS se cobra por tiempo de aplicación activa; FaaS por invocación y duración","FaaS no mantiene estado entre invocaciones; PaaS sí puede","FaaS sufre cold start: la primera invocación tras un rato tarda más"],
+ e:"La diferencia parte de la unidad que despliegas. En PaaS subes una aplicación completa que la plataforma empaqueta, despliega y escala; en FaaS registras una función suelta junto con el evento que la dispara. De ahí sale todo lo demás. En PaaS la aplicación sigue viva aunque nadie la use, así que pagas por tiempo de aplicación activa; en FaaS, si la función no se ejecuta no hay nada corriendo y no pagas nada, porque se cobra por invocación y duración. Como consecuencia, FaaS no mantiene estado entre invocaciones, mientras que una aplicación PaaS sí puede guardarlo en memoria. El costo de esa eficiencia es el cold start: si la función lleva rato sin usarse, la primera invocación tarda más porque hay que levantar el entorno."},
+
+{t:"nube",k:"mc",q:"Una función Lambda procesa imágenes y se ejecuta 10 veces al día; la misma lógica en un PaaS corre 24/7. ¿Cuál cuesta menos y cuándo se invierte la respuesta?",
+ o:["FaaS cuesta menos con carga baja o esporádica; se invierte con tráfico alto y sostenido","PaaS siempre cuesta menos porque no tiene cold start","FaaS siempre cuesta menos","Cuestan lo mismo porque el hardware es el mismo"],a:0,
+ e:"Con 10 ejecuciones diarias, FaaS cobra solo esas 10 invocaciones mientras el PaaS factura las 24 horas. Pero cuando el tráfico es alto y constante, el costo por invocación de FaaS supera al de tener una aplicación siempre encendida, y ahí conviene PaaS."},
+
+{t:"nube",k:"vf",q:"“Serverless” significa que no hay servidores involucrados en la ejecución.",a:false,
+ e:"Falso. Serverless significa que no los ves ni los administras tú: el proveedor levanta el entorno cuando llega el evento, ejecuta tu función y lo destruye. Servidores hay, y siguen siendo físicos."},
+
+{t:"nube",k:"mc",q:"En la tabla de responsabilidades, ¿cuál es el ÚNICO modelo donde el proveedor administra también los DATOS y la APLICACIÓN?",
+ o:["SaaS","PaaS","FaaS","IaaS"],a:0,
+ e:"En SaaS no administras absolutamente nada: solo consumes y configuras. En PaaS y FaaS los datos y la aplicación (o el código de la función) siguen siendo tuyos. La regla que resume la tabla: mientras más “aaS”, más administra el proveedor y menos control te queda."},
+
+{t:"nube",k:"ms",q:"En un montaje IaaS, selecciona TODAS las capas que administra el CLIENTE.",
+ o:["Sistema operativo","Runtime / middleware","Datos","Aplicación","Virtualización","Redes y hardware"],a:[0,1,2,3],
+ e:"En IaaS el proveedor cubre redes/hardware y virtualización. El cliente administra del sistema operativo para arriba: SO, runtime, datos y aplicación. Por eso IaaS conviene cuando necesitas control total o vas a migrar sin reescribir (lift and shift)."},
+
+{t:"nube",k:"mc",q:"Siguiendo la analogía de la pizza del curso, “pides pizza a domicilio y solo pones la mesa y la bebida” corresponde a:",
+ o:["PaaS","IaaS","SaaS","On-premise"],a:0,
+ e:"On-premise es hacerla en casa con tu horno; IaaS es comprar masa e ingredientes y que el horno lo ponga otro; PaaS es pedirla a domicilio y poner solo la mesa; SaaS es ir al restaurante y no poner nada; FaaS es que te sirvan porción por porción y pagues solo las que comes."},
+
+{t:"nube",k:"mc",q:"Una empresa quiere migrar una aplicación antigua a la nube sin reescribirla (lift and shift). ¿Qué modelo de servicio es el adecuado?",
+ o:["IaaS, porque da control total del entorno y se comporta como el servidor que ya tenían","PaaS, porque escala solo","SaaS, porque no hay que administrar nada","FaaS, porque es lo más barato"],a:0,
+ e:"IaaS entrega infraestructura cruda con acceso administrador, igual que un servidor físico pero sin comprarlo. Un PaaS puede simplemente no permitir la versión específica de una librería del sistema o la configuración particular de SO que la aplicación vieja necesita."},
+
+{t:"nube",k:"mc",q:"Un banco necesita que los datos de clientes no compartan infraestructura con otras empresas, pero su portal público recibe picos enormes a fin de mes. ¿Qué modelo de DESPLIEGUE resuelve las dos cosas?",
+ o:["Nube híbrida: lo regulado en la privada y el portal en la pública, que absorbe los picos","Multicloud: repartir entre AWS y Azure","Nube pública con cifrado","Nube privada exclusivamente"],a:0,
+ e:"La híbrida combina privada y pública conectadas de forma que datos y aplicaciones puedan moverse entre ambas: deja lo sensible o regulado en privado y aprovecha la elasticidad de la pública para el resto."},
+
+{t:"nube",k:"vf",q:"Nube privada y on-premise son lo mismo.",a:false,
+ e:"Falso, y es el error típico más común del tema. La nube privada puede estar alojada y operada por un tercero en el datacenter del tercero. Lo que la hace privada es que la infraestructura es de USO EXCLUSIVO de una organización, no dónde está el rack."},
+
+{t:"nube",k:"mc",q:"¿Cuál es la diferencia central entre nube híbrida y multicloud?",
+ o:["Híbrida combina privada + pública; multicloud usa varias públicas entre sí","Híbrida usa dos proveedores y multicloud tres o más","Híbrida es on-premise y multicloud es en Internet","Son sinónimos según el modelo NIST"],a:0,
+ e:"Híbrida necesita una nube privada por definición; multicloud no necesariamente. Motivos distintos: la híbrida busca cumplir regulación sin perder elasticidad; multicloud busca no depender de un solo proveedor. Se pueden dar juntas: privada + AWS + Azure es híbrida Y multicloud."},
+
+{t:"nube",k:"mc",q:"Una empresa corre sus máquinas en AWS pero usa BigQuery de Google para analítica. ¿Qué modelo de despliegue es?",
+ o:["Multicloud","Nube híbrida","Nube privada","Nube comunitaria"],a:0,
+ e:"Multicloud: servicios de varios proveedores de nube PÚBLICA a la vez. Se hace para mitigar el vendor lock-in, aprovechar el mejor servicio de cada uno y sobrevivir a la caída completa de un proveedor. No hay nube privada de por medio, así que no es híbrida."},
+
+{t:"nube",k:"ms",q:"Selecciona TODOS los modelos de despliegue que reconoce el curso.",
+ o:["Privada","Pública","Híbrida","Multicloud","Elástica"],a:[0,1,2,3],
+ e:"Los cuatro modelos de despliegue son privada, pública, híbrida y multicloud. Definen de quién es la infraestructura y quién más la usa. “Elástica” es una característica esencial, no un modelo de despliegue."},
+
+{t:"nube",k:"vf",q:"El modelo de servicio (IaaS/PaaS/SaaS/FaaS) y el modelo de despliegue (privada/pública/híbrida/multicloud) son ejes independientes: puedes tener IaaS en nube privada o SaaS en nube pública.",a:true,
+ e:"Verdadero. El modelo de servicio define hasta dónde administra el proveedor; el de despliegue define de quién es la infraestructura. Confundir los dos ejes es un error típico marcado en la nota."},
+
+{t:"nube",k:"ab",q:"Clasifica cada uno según modelo de SERVICIO y de DESPLIEGUE: (a) el Gmail corporativo de la universidad, (b) las máquinas EC2 de tu empresa en AWS, (c) un clúster de Kubernetes montado en el datacenter propio de la empresa para uso exclusivo interno.",
+ p:["(a) SaaS en nube pública","(b) IaaS en nube pública","(c) IaaS (o PaaS) en nube privada","Reconocer que servicio y despliegue son ejes independientes"],
+ e:"(a) Gmail corporativo es SaaS: software completo y funcionando, no administras nada, solo configuras; y está en nube pública, porque la infraestructura de Google es compartida entre muchísimas organizaciones. (b) EC2 es IaaS: te entregan máquinas virtuales con acceso administrador y tú pones SO, runtime, datos y aplicación; en nube pública, porque AWS es un proveedor externo compartido. (c) Un clúster de Kubernetes propio, en su datacenter y de uso exclusivo, es nube privada por el despliegue; por servicio se comporta como IaaS o PaaS interno según qué tanto le entregue a los equipos. Lo importante es responder los dos ejes, porque son independientes."},
+
+{t:"nube",k:"ms",q:"Selecciona TODAS las que el curso lista como VENTAJAS de la nube.",
+ o:["Reducción de costos (CAPEX a OPEX)","Optimización de recursos","Recuperación rápida","Rapidez y agilidad (time-to-market)","Control físico total sobre el hardware","Independencia total del proveedor"],a:[0,1,2,3],
+ e:"Ventajas: reducción de costos, optimización de recursos, administración simplificada, disponibilidad y acceso global, recuperación rápida, rapidez y agilidad, y seguridad. El control físico se PIERDE, y la dependencia del proveedor es precisamente una desventaja."},
+
+{t:"nube",k:"ms",q:"Selecciona TODAS las que el curso lista como DESVENTAJAS de la nube.",
+ o:["Percepción de inseguridad","Pérdida de control físico","Dependencia del acceso a Internet","Vendor lock-in","Complejidad de la gestión de costos","Imposibilidad de escalar horizontalmente"],a:[0,1,2,3,4],
+ e:"Las seis desventajas son: percepción de inseguridad, pérdida de control físico, dependencia del acceso a Internet, vendor lock-in, costo de transferencia de datos y complejidad de la gestión de costos. Escalar horizontalmente es justamente lo que la nube facilita."},
+
+{t:"nube",k:"ab",q:"Explica por qué el costo de transferencia de datos hacia afuera y el vendor lock-in son dos desventajas que se refuerzan entre sí.",
+ p:["Los proveedores cobran poco por meter datos y bastante por sacarlos","Migrar a otro proveedor exige sacar todos los datos, y eso cuesta caro","Cuanto más volumen acumulas, más caro sale irse","Además, usar servicios propietarios hace que migrar exija reescribir, no solo mover datos","El resultado es que quedarse siempre parece más barato que irse"],
+ e:"Los proveedores suelen cobrar poco o nada por meter datos y bastante por sacarlos, lo que se conoce como tarifa de egreso. El vendor lock-in es la dependencia que se crea al usar cada vez más servicios propietarios del proveedor. Se refuerzan porque migrar exige sacar todos los datos acumulados, y esa factura crece con el volumen: mientras más tiempo llevas, más caro es irte. A la vez, mientras más servicios propietarios usaste, más código hay que reescribir para migrar, así que el costo total de salida sube por dos vías a la vez. El efecto práctico es que quedarse siempre parece la opción barata, aunque el proveedor suba precios."},
+
+{t:"nube",k:"mc",q:"Tu jefe dice “pasémonos a la nube para ahorrar plata”. ¿Cuál es la razón MÁS fuerte para migrar según el curso?",
+ o:["El valor estratégico y el time-to-market más rápido: lanzar antes que la competencia","El ahorro directo en la factura mensual","No tener que contratar personal de TI","Que los datos queden más seguros automáticamente"],a:0,
+ e:"El curso ordena las razones de la más estratégica a la más operativa, y la número uno en la práctica es el valor estratégico y el time-to-market: lanzar antes que la competencia vale más que ahorrar en servidores. El ahorro puede incluso no darse si la gestión de costos es mala."},
+
+{t:"nube",k:"mc",q:"¿Qué distingue CAPEX de OPEX en el contexto de infraestructura?",
+ o:["CAPEX es inversión inicial en un activo (comprar servidores); OPEX es gasto recurrente por operar (la factura mensual de la nube)","CAPEX es gasto de personal y OPEX de hardware","CAPEX aplica solo a nube privada","Son dos formas de calcular la disponibilidad"],a:0,
+ e:"El riesgo también cambia: el CAPEX se paga ANTES de saber si se necesitaba; el OPEX se ajusta al uso real. Migrar a la nube reduce CAPEX y aumenta el ROI, porque deja de inmovilizarse capital en hardware ocioso."},
+
+{t:"nube",k:"mc",q:"Una tienda vende normal todo el año pero en Black Friday recibe 30 veces más tráfico. ¿Cuál es la ventaja concreta de resolverlo en la nube?",
+ o:["Levanta 30 máquinas el jueves, las apaga el sábado y paga solo esas 48 horas","Compra 30 servidores con descuento por volumen","Bloquea el exceso de usuarios para no caerse","Reduce la latencia de todos los usuarios a cero"],a:0,
+ e:"Con servidores propios habría que comprar capacidad para ese único día y desperdiciarla los otros 364. Es el caso de libro de elasticidad + medición del servicio trabajando juntas."},
+
+{t:"nube",k:"vf",q:"En la nube, la infraestructura como código hace que “reconstruir todo” sea básicamente ejecutar un script, y por eso la recuperación es rápida.",a:true,
+ e:"Verdadero. Restaurar desde una copia o levantar la infraestructura en otra región toma minutos, no días, porque la definición de la infraestructura está en un archivo versionado que se vuelve a ejecutar."},
+
+{t:"nube",k:"mc",q:"¿Cuál de estas es la razón por la que un gran proveedor de nube puede ofrecer MÁS seguridad que una empresa mediana?",
+ o:["Ofrece cifrado, gestión de identidades y certificaciones que superan lo que esa empresa montaría por su cuenta","Porque los datos están en otro país","Porque nadie más usa su hardware","Porque el tráfico nunca sale a Internet"],a:0,
+ e:"La seguridad aparece como VENTAJA en el curso justamente por economía de escala: el proveedor invierte en controles, auditorías y certificaciones que una empresa mediana no podría costear. La desventaja asociada es la PERCEPCIÓN de inseguridad por compartir infraestructura, que es otra cosa."},
+
+{t:"nube",k:"mc",q:"Los tres proveedores que concentran la mayor parte del mercado de infraestructura en la nube son:",
+ o:["AWS, Microsoft Azure y Google Cloud","AWS, IBM y Oracle","Google Cloud, Alibaba y DigitalOcean","Azure, Heroku y Vercel"],a:0,
+ e:"AWS, Azure y Google Cloud lideran, y el gasto mundial en servicios de infraestructura en la nube sigue creciendo año a año. Si el parcial pide porcentajes exactos de cuota, verifícalos contra 02-Nube.pdf."},
+
+{t:"nube",k:"mc",q:"“La nube” según el curso NO es un tipo de tecnología sino:",
+ o:["Un modelo de consumo: hardware de un tercero, en sus instalaciones, consumido por demanda y pagado por uso","Un protocolo de red de última generación","Un tipo especial de virtualización","Un estándar de seguridad para datacenters"],a:0,
+ e:"El hardware sigue siendo servidores en un galpón; lo que cambia es que no son tuyos, no los administras y los pagas como un servicio público. Por eso se define por las 5 características y no por la tecnología usada."},
+
+{t:"nube",k:"mc",q:"¿Qué desventaja de la nube desaparecería si una aplicación interna corriera en la infraestructura local de la empresa?",
+ o:["La dependencia del acceso a Internet","El vendor lock-in","La complejidad de la gestión de costos","La percepción de inseguridad"],a:0,
+ e:"Si se cae el enlace a Internet, se cae tu acceso a todo lo que esté en nube pública. En infraestructura local, una aplicación interna seguiría funcionando para los usuarios de la propia red."},
+
+{t:"nube",k:"mc",q:"Se dice que la nube es “el medio por el cual creamos e instanciamos los sistemas distribuidos”. ¿Qué relación establece esa frase?",
+ o:["La nube es DÓNDE se ejecuta lo que la teoría de sistemas distribuidos explica","La nube reemplaza a los sistemas distribuidos","Los sistemas distribuidos solo existen en la nube","Son dos nombres para el mismo concepto"],a:0,
+ e:"Es la idea que abre la materia y la razón del orden de las unidades: primero la teoría de sistemas distribuidos (qué problemas hay), después la nube (dónde y con qué se resuelven en la práctica)."},
+
+{t:"nube",k:"ms",q:"Selecciona TODAS las razones por las que, según el curso, las organizaciones se mueven a la nube.",
+ o:["Valor estratégico y time-to-market más rápido","Reduce CAPEX","Aumenta el ROI","Menos personal de TI dedicado a operación","Aprovisionamiento rápido y escalabilidad elástica","Elimina por completo los riesgos de seguridad"],a:[0,1,2,3,4],
+ e:"Las razones del curso, de la más estratégica a la más operativa: valor estratégico y time-to-market, reducir CAPEX, aumentar el ROI, menos personal dedicado a operación, uso eficiente de recursos, y aprovisionamiento rápido con escalabilidad elástica. La seguridad no se elimina: cambia de manos y de forma."},
+
+{t:"nube",k:"mc",q:"Un equipo escoge SaaS para su gestor de correo corporativo. ¿Cuál es el costo principal de esa decisión?",
+ o:["Es el modelo con menos control: no decides cuándo se actualiza ni qué funciones cambian, y tus datos viven en el formato del proveedor","Tiene que administrar el sistema operativo","Sufre cold start en cada acceso","Debe configurar el autoescalado"],a:0,
+ e:"SaaS resuelve que la mayoría de las empresas no necesita CONSTRUIR un gestor de correo, sino usarlo. El precio es el lock-in en su forma más fuerte: cero control sobre actualizaciones, funciones y formato de los datos."},
+
+{t:"nube",k:"vf",q:"En FaaS, si tu función no se ejecuta durante un día entero, ese día no generas costo de cómputo por ella.",a:true,
+ e:"Verdadero, y es exactamente el problema que FaaS resuelve frente a PaaS: allá pagas por la aplicación mientras está corriendo aunque nadie la use. El contrapeso es el cold start en la primera invocación tras un periodo inactivo."},
+
+{t:"nube",k:"mc",q:"El “cold start” de una función serverless ocurre porque:",
+ o:["Si la función lleva rato sin usarse, hay que levantar el entorno antes de ejecutarla y la primera invocación tarda más","La red está fría y hay que calentar la conexión TCP","El proveedor limita las invocaciones por minuto","La función se compila en cada llamada"],a:0,
+ e:"El proveedor destruye el entorno entre invocaciones para no cobrarte por él. El costo de esa eficiencia es que la primera llamada después de un periodo inactivo paga el arranque del entorno."},
+
+{t:"nube",k:"mc",q:"Un equipo despliega en PaaS y descubre que necesita una versión específica de una librería del sistema que la plataforma no permite instalar. ¿Qué ilustra el caso?",
+ o:["El intercambio del modelo: más comodidad, menos control","Que PaaS no sirve para aplicaciones web","Que debieron usar SaaS","Que el problema se resuelve con más RAM"],a:0,
+ e:"La regla de la tabla de responsabilidades: mientras más “aaS”, más administra el proveedor y menos control te queda. No hay un modelo mejor que otro, hay un intercambio entre control y comodidad que se elige según lo que el proyecto necesite."},
+
+{t:"nube",k:"mc",q:"¿Por qué el auto-servicio por demanda cambia “la escala de tiempo” de la infraestructura?",
+ o:["Pedirle un servidor al área de TI toma días de tickets; en la nube entras a una consola y en dos minutos la máquina está corriendo","Porque los servidores de nube arrancan más rápido que los físicos","Porque no hay que instalar sistema operativo","Porque la red de los proveedores es más veloz"],a:0,
+ e:"La característica no es solo comodidad: elimina la intervención humana del proveedor y con ella los tiempos de aprobación. Entras a AWS, eliges una instancia, das clic en Launch y te conectas por SSH sin que nadie de Amazon sepa que existes."},
+
+{t:"nube",k:"mc",q:"El “acceso ubicuo a la red” como característica esencial significa que:",
+ o:["Los servicios se consumen desde cualquier dispositivo estándar sin necesitar un cliente especial","El servicio está siempre disponible al 100 %","La red del proveedor cubre todos los países","Se puede acceder sin autenticación"],a:0,
+ e:"Portátil, celular, tablet o línea de comandos: si un servicio solo funcionara desde una terminal específica en una oficina específica, volveríamos al modelo que la nube vino a reemplazar. No hay que confundirlo con disponibilidad."},
+
+// ─── REDES DE DATOS ──────────────────────────────────────────────────
+{t:"redes",k:"ab",q:"Tu PC tiene IP 192.168.1.15 con máscara /24. Explica paso a paso qué hace tu máquina para mandarle un paquete a 192.168.1.20, y qué hace DISTINTO para mandárselo a 8.8.8.8.",
+ p:["Usa la máscara para comparar la parte de red de su IP con la del destino","192.168.1.20 comparte la red 192.168.1 → está en la red local → le habla directo por el medio","8.8.8.8 tiene otra parte de red → está afuera","Al estar afuera, entrega el paquete al gateway (el router)","El gateway lo reenvía y el proceso se repite router por router; al salir pasa por NAT"],
+ e:"En los dos casos la máquina hace primero la misma pregunta: ¿el destino está en mi misma red o afuera? Y la responde con la máscara, que marca con unos los bits de red. Con /24 los primeros 24 bits son de red, así que compara 192.168.1 contra la parte de red del destino. Para 192.168.1.20 coincide, concluye que están en la misma red y le habla directamente por el medio de transmisión, sin intermediarios. Para 8.8.8.8 no coincide, así que sabe que el destino está afuera y le entrega el paquete al gateway, que es la IP del router y la salida de la red. El router lo reenvía hacia la red siguiente y el proceso se repite salto a salto hasta llegar. Además, al salir, el router aplica NAT y reemplaza la IP privada de origen por su IP pública."},
+
+{t:"redes",k:"mc",q:"Tu máquina tiene que decidir si le habla directo a un destino o si se lo entrega al router. ¿Qué elemento le permite tomar esa decisión?",
+ o:["La máscara de subred","El gateway","El DNS","El servidor DHCP"],a:0,
+ e:"La máscara divide la IP en parte de red y parte de host, y con eso la máquina compara si el destino comparte su red. Sin máscara esa decisión es imposible. El gateway es la SALIDA que se usa cuando la respuesta es “está afuera”, no quien decide."},
+
+{t:"redes",k:"mc",q:"Una subred /24 tiene 256 direcciones totales. ¿Cuántos hosts USABLES tiene y por qué?",
+ o:["254, porque se restan la dirección de red y la de broadcast","256, todas son asignables","255, solo se resta el broadcast","253, se restan red, broadcast y gateway"],a:0,
+ e:"Error típico de examen: olvidar restar 2. /24 deja 8 bits de host, es decir 2⁸ = 256 direcciones, de las cuales una identifica la red y otra es el broadcast. Quedan 254 usables. El gateway ocupa una de esas 254, no una adicional."},
+
+{t:"redes",k:"mc",q:"¿Cuántos hosts usables tiene una red /25?",
+ o:["126","128","254","62"],a:0,
+ e:"/25 deja 7 bits de host: 2⁷ = 128 direcciones totales, menos red y broadcast = 126 usables. La máscara equivalente es 255.255.255.128."},
+
+{t:"redes",k:"mc",q:"La notación CIDR /16 corresponde a qué máscara y cuántos hosts usables:",
+ o:["255.255.0.0, con 65.534 hosts usables","255.255.255.0, con 254 hosts usables","255.0.0.0, con 65.536 hosts usables","255.255.255.128, con 126 hosts usables"],a:0,
+ e:"/16 significa que los primeros 16 bits son de red. Quedan 16 bits de host: 2¹⁶ = 65.536 direcciones totales, menos las 2 reservadas = 65.534 usables."},
+
+{t:"redes",k:"ms",q:"Selecciona TODOS los rangos de direcciones IP PRIVADAS.",
+ o:["10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","8.8.8.0/24","172.32.0.0/12"],a:[0,1,2],
+ e:"Los tres rangos privados son 10.0.0.0/8 (10.x.x.x), 172.16.0.0/12 (172.16 a 172.31) y 192.168.0.0/16 (192.168.x.x). 8.8.8.8 es pública (DNS de Google) y 172.32.x.x queda FUERA del rango privado, que termina en 172.31."},
+
+{t:"redes",k:"vf",q:"La dirección 172.20.5.10 es una IP privada.",a:true,
+ e:"Verdadero. El rango privado 172.16.0.0/12 cubre de 172.16.0.0 a 172.31.255.255, así que 172.20.x.x cae dentro. Ojo con el límite: 172.32.x.x ya sería pública."},
+
+{t:"redes",k:"mc",q:"Tu `192.168.1.1` y el de tu vecino conviven sin conflicto. ¿Por qué?",
+ o:["Porque son direcciones privadas: ninguna de las dos sale a Internet con esa dirección","Porque los routers negocian quién usa cada dirección","Porque una es IPv4 y otra IPv6","Porque el ISP les asigna subredes distintas"],a:0,
+ e:"Los rangos privados existen justamente para que millones de redes locales reutilicen las mismas direcciones internamente. Si cada dispositivo del mundo necesitara una dirección única globalmente, IPv4 se habría agotado mucho antes."},
+
+{t:"redes",k:"mc",q:"Si IPv4 se agotó hace años, ¿por qué Internet sigue funcionando?",
+ o:["Por NAT, que permite que miles de dispositivos compartan una sola IP pública","Porque IPv4 en realidad no se agotó","Porque todos los dispositivos ya migraron a IPv6","Porque los ISP reciclan direcciones cada noche"],a:0,
+ e:"NAT es el parche que le compró tiempo a IPv4. IPv6 usa 128 bits (frente a los 32 de IPv4) precisamente para no repetir el error, pero la migración no ha sido completa y NAT sigue sosteniendo buena parte de Internet."},
+
+{t:"redes",k:"mc",q:"IPv4 usa 32 bits y IPv6 usa:",
+ o:["128 bits","64 bits","256 bits","48 bits"],a:0,
+ e:"IPv4: 32 bits, ~4.300 millones de direcciones, formato 192.168.1.15. IPv6: 128 bits, cantidad prácticamente inagotable, formato hexadecimal como 2001:db8::15."},
+
+{t:"redes",k:"ab",q:"Una oficina tiene 20 computadores y el ISP le dio una sola IP pública dinámica. ¿Qué tecnología permite que los 20 naveguen? ¿Qué tendría que cambiar si además quisiera alojar un servidor web accesible desde Internet, y por qué no le sirve lo que ya tiene?",
+ p:["NAT permite que los 20 salgan compartiendo la única IP pública","NAT reemplaza la IP privada de origen por la pública y anota la conexión en una tabla","NAT funciona para SALIR pero rompe el ENTRAR: nadie de afuera puede iniciar conexión hacia un host interno","Necesitaría port forwarding en el router, o una IP pública dedicada","Además la IP dinámica cambia cada tanto, así que haría falta una IP estática (o DNS dinámico)"],
+ e:"Los 20 navegan gracias a NAT: cuando un equipo interno manda un paquete, el router reemplaza la IP privada de origen por su propia IP pública y anota en una tabla qué conexión pertenece a quién, de modo que al llegar la respuesta se la entrega al equipo correcto. Para los servidores de afuera, los 20 se ven como un solo cliente. El problema es que NAT funciona bien para salir pero rompe el entrar: como los equipos internos no tienen dirección propia visible desde afuera, nadie en Internet puede iniciar una conexión hacia ellos. Para alojar un servidor web habría que configurar explícitamente una redirección de puertos en el router, o contratar una IP pública dedicada. Y hay un segundo problema: la IP es dinámica, así que cambia cada tanto y los clientes no sabrían dónde buscar; haría falta una IP estática o un servicio de DNS dinámico."},
+
+{t:"redes",k:"mc",q:"¿Cuál es la diferencia esencial entre NAT y DHCP?",
+ o:["DHCP ASIGNA direcciones a los dispositivos de la red; NAT TRADUCE direcciones privadas a una pública","NAT asigna direcciones y DHCP las traduce","Los dos asignan direcciones, pero NAT lo hace por IPv6","DHCP funciona en LAN y NAT solo en WAN"],a:0,
+ e:"Se confunden mucho porque los dos viven en el router. DHCP actúa al conectarse el dispositivo y le entrega IP, máscara, gateway y DNS. NAT actúa cada vez que un paquete sale o entra a Internet. Sin DHCP tocaría configurar cada equipo a mano; sin NAT los dispositivos privados no podrían salir."},
+
+{t:"redes",k:"ms",q:"¿Qué CUATRO datos entrega un servidor DHCP a un dispositivo que se conecta?",
+ o:["Dirección IP","Máscara de subred","Gateway","DNS","Dirección MAC","Puerto de servicio"],a:[0,1,2,3],
+ e:"Son exactamente los cuatro datos que hacen falta para comunicarse. La MAC ya la trae la tarjeta de red de fábrica, y el puerto lo define cada servicio, no el DHCP. El servidor reserva la configuración por un tiempo determinado, llamado lease."},
+
+{t:"redes",k:"mc",q:"Llegas a la universidad, te conectas al WiFi y navegas sin configurar nada. ¿Qué protocolo hizo el trabajo?",
+ o:["DHCP","DNS","NAT","HTTP"],a:0,
+ e:"DHCP le entregó IP, máscara, gateway y DNS en menos de un segundo. Configurar eso a mano en una red de 200 equipos sería inviable y propenso a errores como asignar la misma IP dos veces."},
+
+{t:"redes",k:"vf",q:"NAT actúa como una barrera implícita contra conexiones entrantes no solicitadas, y eso es un efecto secundario de seguridad.",a:true,
+ e:"Verdadero. Como los dispositivos internos no tienen dirección visible desde afuera, nadie de Internet puede iniciar una conexión hacia ellos sin port forwarding explícito. No reemplaza a un firewall, pero la asimetría de NAT sí funciona como barrera."},
+
+{t:"redes",k:"mc",q:"¿Cuándo necesitas realmente una IP pública ESTÁTICA?",
+ o:["Cuando otros tienen que encontrarte a ti: alojar un servidor web, de correo o una VPN","Siempre que quieras navegar más rápido","Cuando tienes más de 10 dispositivos en casa","Cuando usas IPv6"],a:0,
+ e:"Si solo navegas y consumes servicios, una IP dinámica con NAT basta. La estática se necesita cuando alguien debe iniciar la conexión HACIA ti, porque una dirección que cambia rompe que te encuentren. La privada es gratuita; la pública la entrega el ISP y la estática suele tener costo adicional."},
+
+{t:"redes",k:"mc",q:"¿Por qué DNS se considera uno de los primeros sistemas distribuidos y no “un servidor con una tabla gigante”?",
+ o:["Son miles de servidores autónomos, repartidos por el mundo, que se coordinan por mensajes y se presentan como un solo servicio coherente","Porque tiene copias de seguridad en varios países","Porque usa el puerto 53 en todos los servidores","Porque lo administra una sola organización internacional"],a:0,
+ e:"Cumple la definición al pie de la letra. Además ilustra dos técnicas de escalabilidad: particionamiento (cada servidor conoce solo su zona y sabe a quién preguntar por el resto) y caché (las respuestas se guardan un tiempo para no repetir la consulta)."},
+
+{t:"redes",k:"ms",q:"Selecciona las DOS técnicas de escalabilidad que ilustra el funcionamiento de DNS.",
+ o:["Particionamiento: cada servidor conoce solo su zona","Caché: las respuestas se guardan un tiempo","Replicación síncrona de toda la base en cada nodo","Escalado vertical de los servidores raíz"],a:[0,1],
+ e:"DNS es jerárquico y distribuido: ningún servidor conoce todos los dominios del mundo, y la consulta va bajando por la jerarquía hasta el servidor autoritativo. Eso es particionamiento. Y las respuestas se cachean por un tiempo (TTL), que es ocultar la replicación."},
+
+{t:"redes",k:"mc",q:"Además de traducir nombres a IP, ¿qué otra ventaja arquitectónica aporta DNS?",
+ o:["Una capa de indirección: si un servicio cambia de servidor la IP cambia, pero el nombre no","Cifra el tráfico entre cliente y servidor","Asigna direcciones privadas a los hosts","Balancea la carga entre procesadores"],a:0,
+ e:"Esa indirección es lo que permite mover la infraestructura sin que nadie tenga que actualizar nada, y es la razón por la que quemar IPs en el código es la falacia de “la topología no cambia”."},
+
+{t:"redes",k:"mc",q:"Un firewall decide si permite o bloquea una conexión examinando cada paquete. ¿Con base en qué?",
+ o:["IP de origen/destino, puerto y protocolo","El contenido del mensaje y su idioma","La velocidad del enlace","La cantidad de usuarios conectados"],a:0,
+ e:"Existe porque tener un servicio accesible por red significa que cualquiera puede intentar conectarse, incluido quien no debería. El firewall define quién puede hablar con qué."},
+
+{t:"redes",k:"ms",q:"Selecciona TODOS los lugares donde puede vivir un firewall según el curso.",
+ o:["En el computador (Windows Defender Firewall, UFW)","En el router, protegiendo toda la red","En la nube (AWS Security Groups)","Dentro del cable de red"],a:[0,1,2],
+ e:"Los tres niveles: host, red y nube. Los Security Groups de AWS son el ejemplo del curso para firewall en la nube, y funcionan igual: reglas por IP, puerto y protocolo."},
+
+{t:"redes",k:"mc",q:"Una regla típica de servidor web permite entrada por 80 y 443 desde cualquier IP, y por el 22 solo desde la IP de la oficina. ¿Qué servicio está restringido a la oficina y por qué tiene sentido?",
+ o:["SSH, porque es acceso administrativo y no debe quedar expuesto a todo Internet","HTTPS, porque transporta datos cifrados","DNS, porque revela los nombres internos","MySQL, porque contiene los datos"],a:0,
+ e:"El puerto 22 es SSH: acceso de administración a la máquina. Dejarlo abierto a todo Internet es superficie de ataque innecesaria. 80 y 443 sí deben estar abiertos porque son el servicio público."},
+
+{t:"redes",k:"ms",q:"Relaciona correctamente. Selecciona TODAS las asociaciones puerto→servicio que sean correctas.",
+ o:["22 → SSH","53 → DNS","443 → HTTPS","3306 → MySQL","80 → PostgreSQL"],a:[0,1,2,3],
+ e:"Los puertos del curso: 22 SSH, 53 DNS, 80 HTTP, 443 HTTPS, 3306 MySQL, 5432 PostgreSQL. El 80 es HTTP, no PostgreSQL."},
+
+{t:"redes",k:"mc",q:"¿Por qué existen los puertos si la IP ya identifica al destino?",
+ o:["La IP identifica la máquina, pero una máquina corre muchos servicios; el puerto identifica a cuál de ellos va el paquete","Para cifrar el tráfico de cada servicio por separado","Para que el router sepa por dónde enrutar","Para limitar el número de conexiones simultáneas"],a:0,
+ e:"Analogía del curso: la IP es la dirección del edificio y el puerto es el número del apartamento. Sin puertos, un servidor con web y base de datos no sabría a cuál entregarle lo que llega."},
+
+{t:"redes",k:"mc",q:"Un servicio, en el sentido del curso, es:",
+ o:["Un programa que permanece ejecutándose en segundo plano esperando solicitudes, normalmente escuchando en un puerto","Cualquier programa instalado en el servidor","Una función que se ejecuta y termina","Una máquina virtual dedicada"],a:0,
+ e:"La clave es que queda a la espera. Por eso se lo ve en estado LISTEN al revisar los puertos, y por eso cada servicio escuchando es una puerta potencial de entrada."},
+
+{t:"redes",k:"ab",q:"Un `netstat` en tu servidor muestra un puerto en estado LISTEN que no corresponde a ningún servicio que hayas instalado a propósito. Explica por qué eso es un problema de seguridad y qué deberías hacer.",
+ p:["Cada puerto en LISTEN es una puerta potencial de entrada al sistema","Un servicio inesperado indica software mal configurado o no deseado","Cada puerto abierto de más es superficie de ataque sin beneficio a cambio","Hay que identificar qué proceso lo abrió y detener el servicio (bajarlo) si no es necesario","Complementariamente, cerrarlo por firewall"],
+ e:"Cada servicio escuchando en un puerto es una puerta potencial de entrada, así que revisar los puertos en LISTEN es una práctica de seguridad básica. Un puerto abierto que no corresponde a nada que hayas instalado a propósito es indicio de un servicio mal configurado o de software no deseado en la máquina. Lo importante es el principio: cada puerto abierto de más es superficie de ataque sin ningún beneficio a cambio. La acción correcta es identificar qué proceso lo abrió, con netstat -tulnp o ss -tulnp, y bajar el servicio si no es necesario, complementando con una regla de firewall que bloquee ese puerto."},
+
+{t:"redes",k:"mc",q:"¿Qué comando muestra los saltos (routers) del camino hasta un destino?",
+ o:["traceroute / tracert","ping","nslookup","netstat"],a:0,
+ e:"traceroute (Linux) o tracert (Windows) muestra los routers intermedios. ping comprueba conectividad y mide latencia; nslookup consulta al DNS; netstat lista puertos y conexiones."},
+
+{t:"redes",k:"mc",q:"¿Qué comando usarías para saber qué IP corresponde a un nombre de dominio?",
+ o:["nslookup","ipconfig","ping -c 4","ss -tulnp"],a:0,
+ e:"nslookup consulta al DNS y muestra qué servidor respondió y qué IP entregó. ipconfig/ip a muestra tus interfaces; ss/netstat listan puertos locales."},
+
+{t:"redes",k:"vf",q:"Una misma máquina puede tener varias interfaces de red (Ethernet, WiFi, VPN, Bluetooth), cada una con su propia IP.",a:true,
+ e:"Verdadero, y es un dato del curso. Por eso `ip a` casi siempre lista más de una interfaz con su respectiva dirección."},
+
+{t:"redes",k:"mc",q:"Un mensaje se parte en varios paquetes para viajar. ¿Cuál es la razón principal?",
+ o:["Si se corrompe algo, solo se retransmite el pedazo dañado, y varios mensajes pueden compartir el enlace intercalándose","Porque los routers no aceptan mensajes largos","Porque así se cifra mejor","Porque la máscara de subred limita el tamaño"],a:0,
+ e:"Mandar un mensaje grande como una sola pieza obligaría a retransmitirlo entero ante cualquier corrupción, y bloquearía el enlace para los demás. La consecuencia para sistemas distribuidos es que los paquetes pueden tomar rutas distintas, llegar desordenados o no llegar: la razón técnica de por qué “la red es confiable” es falso."},
+
+{t:"redes",k:"ms",q:"¿Qué CINCO cosas hacen falta para que un host le mande un paquete a otro?",
+ o:["Dirección IP","Máscara de subred","Gateway","DNS (si se usó un nombre)","Medio de transmisión","Dirección MAC del destino final en Internet"],a:[0,1,2,3,4],
+ e:"Las cinco son IP, máscara, gateway, DNS y medio de transmisión. No son una lista suelta: son los pasos del razonamiento encadenado que hace tu máquina cada vez que manda algo."},
+
+{t:"redes",k:"mc",q:"Según el alcance geográfico, ¿cuál es la diferencia REAL entre una LAN y una WAN, más allá del tamaño?",
+ o:["En la LAN tú controlas la red y la latencia es submilisegundo; en la WAN atraviesas equipos de terceros con latencia de decenas o cientos de ms","Que la LAN usa cable y la WAN fibra óptica","Que la LAN usa IPv4 y la WAN IPv6","Que la WAN no permite compartir recursos"],a:0,
+ e:"La diferencia real es velocidad y control. Por eso las falacias de Deutsch muerden tan fuerte al pasar de LAN a WAN: lo que era instantáneo y confiable deja de serlo. Una WAN es, en esencia, muchas LAN conectadas entre sí."},
+
+{t:"redes",k:"mc",q:"Una PAN (Personal Area Network) tiene un alcance aproximado de:",
+ o:["10 metros","100 metros","1 kilómetro","Un edificio completo"],a:0,
+ e:"PAN ≈ 10 metros, administrada por el propio usuario: Bluetooth, smartwatch, audífonos inalámbricos. LAN cubre un edificio o campus; WAN abarca países o continentes."},
+
+{t:"redes",k:"vf",q:"Cliente y servidor son tipos de máquina: una máquina es cliente o es servidor, pero no las dos cosas.",a:false,
+ e:"Falso. Son ROLES, no tipos de máquina. Un servidor web es servidor para el navegador, pero cliente cuando le pide datos a la base de datos. Un mismo computador puede desempeñar los dos roles a la vez."},
+
+{t:"redes",k:"ab",q:"Describe el flujo completo de lo que pasa desde que escribes una URL en el navegador hasta que ves la página, nombrando los elementos de red que intervienen.",
+ p:["El navegador consulta al DNS para traducir el nombre a una IP","La máscara determina que la IP no es local y el paquete va al gateway","Al salir de la red local pasa por NAT","Se envía una solicitud HTTP/HTTPS al puerto 80 o 443 de esa IP","Viaja por Internet saltando de router en router","En el destino, el firewall decide si permite la conexión","El servicio que escucha en ese puerto procesa la petición","El servidor responde con un código de estado y el navegador muestra la página"],
+ e:"El usuario escribe una URL y el navegador consulta al DNS para traducir el nombre a una dirección IP. Con esa IP, el sistema usa la máscara de subred para determinar que el destino no está en la red local, así que le entrega el paquete al gateway. Al salir de la red local el router aplica NAT y reemplaza la IP privada de origen por la pública. El cliente envía una solicitud HTTP o HTTPS al puerto 80 o 443 de la IP destino, y la solicitud viaja por Internet saltando de router en router. Al llegar al servidor, el firewall decide si permite la conexión según sus reglas de IP, puerto y protocolo. Si la permite, el servicio que escucha en ese puerto procesa la petición, y el servidor devuelve una respuesta con su código de estado. El navegador la interpreta y muestra la página. Resumido: Cliente → Red local → Gateway/NAT → Internet → Firewall → Servidor → Respuesta → Cliente."},
+
+{t:"redes",k:"mc",q:"¿Por qué es una ventaja para la escalabilidad horizontal que HTTP sea stateless?",
+ o:["Como ninguna petición depende de la anterior, cualquiera de los servidores detrás del balanceador puede atenderla","Porque reduce el tamaño de los paquetes","Porque permite usar UDP en vez de TCP","Porque elimina la necesidad de autenticación"],a:0,
+ e:"Si el servidor tuviera que recordar tu sesión en memoria, tendrías que volver siempre al mismo servidor, y ahí se acaba la escalabilidad horizontal. El costo es que hay que simular el estado: de ahí salen cookies, tokens y sesiones, que el cliente reenvía en cada petición."},
+
+{t:"redes",k:"vf",q:"Decir que “HTTP guarda la sesión” es correcto, porque el servidor recuerda quién eres entre peticiones.",a:false,
+ e:"Falso. HTTP es stateless: cada petición es independiente y el servidor no recuerda por sí solo lo que pasó en la anterior. El estado lo REENVÍA el cliente en cada petición mediante cookies, tokens o identificadores de sesión."},
+
+{t:"redes",k:"mc",q:"Un servidor responde con código 404. ¿De quién es el error, según la familia de códigos HTTP?",
+ o:["Del cliente (4xx): pidió algo mal o inexistente","Del servidor (5xx): falló al procesar","Es una redirección (3xx)","Es un éxito (2xx) con cuerpo vacío"],a:0,
+ e:"Las familias: 2xx éxito, 3xx redirección, 4xx error del cliente (pediste mal), 5xx error del servidor (el servidor falló). Distinguirlas importa porque señala dónde buscar el problema."},
+
+{t:"redes",k:"mc",q:"HTTPS se diferencia de HTTP en que:",
+ o:["Es HTTP + cifrado TLS, usa el puerto 443 y protege confidencialidad e integridad","Usa UDP en vez de TCP y es más rápido","Cambia los métodos GET y POST por versiones seguras","Elimina la necesidad de autenticación del usuario"],a:0,
+ e:"HTTPS = HTTP sobre TLS, puerto 443 en vez del 80. Protege confidencialidad (nadie lee el contenido en el camino) e integridad (nadie lo altera). No sustituye la autenticación de usuario ni la autorización."},
+
+{t:"redes",k:"ms",q:"Selecciona TODOS los métodos HTTP y su significado correcto.",
+ o:["GET: traer","POST: crear","PUT: reemplazar","DELETE: borrar","PATCH: reemplazar el recurso completo"],a:[0,1,2,3],
+ e:"PATCH modifica PARCIALMENTE; el que reemplaza el recurso completo es PUT. Esa diferencia importa además para la idempotencia: PUT es idempotente siempre, PATCH depende de si fija un valor o incrementa."},
+
+{t:"redes",k:"mc",q:"¿Por qué se dice que HTTP es un ejemplo directo de cómo se logra la HETEROGENEIDAD en sistemas distribuidos?",
+ o:["Porque permite que cualquier cliente y cualquier servidor, escritos por gente distinta en lenguajes distintos, se entiendan","Porque funciona sobre cualquier tipo de cable","Porque soporta IPv4 e IPv6","Porque no requiere autenticación"],a:0,
+ e:"La heterogeneidad se logra con protocolos y formatos de datos acordados que ambos lados entiendan sin importar en qué estén escritos. HTTP y JSON son el caso canónico."},
+
+{t:"redes",k:"mc",q:"Una red existe fundamentalmente para:",
+ o:["Compartir datos, hardware y servicios, y permitir la comunicación entre dispositivos","Aumentar la velocidad de los procesadores","Reducir el consumo eléctrico de los equipos","Cifrar la información almacenada"],a:0,
+ e:"Sin red, cada recurso solo lo puede usar quien esté físicamente frente a la máquina. Con red, un recurso caro (una impresora, un servidor potente) lo aprovechan muchos."},
+
+{t:"redes",k:"mc",q:"El gateway es, técnicamente:",
+ o:["La dirección IP del router: la salida de tu red hacia otras redes","El servidor que asigna las direcciones IP","El servidor que traduce nombres a direcciones","El dispositivo que filtra paquetes por reglas"],a:0,
+ e:"Tu máquina solo sabe hablarle directamente a quien está en su misma red; para todo lo demás necesita un intermediario que conozca el camino hacia afuera. Quien asigna direcciones es DHCP, quien traduce nombres es DNS y quien filtra es el firewall."},
+
+// ─── SEGURIDAD: CIA Y AAA ────────────────────────────────────────────
+{t:"seg",k:"mc",q:"En un examen preguntan “¿cuáles son los OBJETIVOS de la seguridad?”. ¿Qué debes responder?",
+ o:["El triángulo CIA: Confidencialidad, Integridad, Disponibilidad","La triada AAA: Autenticación, Autorización, Auditoría","Cifrado, firewall y antivirus","Logs, métricas y trazas"],a:0,
+ e:"Error típico marcado en la nota: responder AAA cuando preguntan por objetivos, o CIA cuando preguntan por control de acceso. CIA = qué se protege. AAA = cómo se controla el acceso."},
+
+{t:"seg",k:"mc",q:"En un examen preguntan “¿cuáles son los tres pasos del CONTROL DE ACCESO?”. ¿Qué debes responder?",
+ o:["La triada AAA: Autenticación, Autorización, Auditoría","El triángulo CIA: Confidencialidad, Integridad, Disponibilidad","Usuario, contraseña y token","Identificación, cifrado y respaldo"],a:0,
+ e:"AAA es el MECANISMO: autenticar (quién eres), autorizar (qué puedes hacer) y auditar (registrar qué hiciste). CIA son los OBJETIVOS que ese mecanismo persigue."},
+
+{t:"seg",k:"ab",q:"Explica la relación entre el triángulo CIA y la triada AAA, y por qué confundirlos es error de examen.",
+ p:["CIA son los OBJETIVOS de seguridad: Confidencialidad, Integridad, Disponibilidad","AAA es el MECANISMO de control de acceso: Autenticación, Autorización, Auditoría","AAA es el medio con el que se consiguen los objetivos del CIA","Autenticar y autorizar protegen confidencialidad e integridad","Auditar permite detectar y reconstruir lo que pasó cuando algo falla"],
+ e:"El triángulo CIA define QUÉ se protege: confidencialidad (solo quien debe ver la información la ve), integridad (nadie la altera sin autorización) y disponibilidad (está accesible cuando se necesita). La triada AAA define CÓMO se controla el acceso: autenticación (verificar quién eres), autorización (verificar qué puedes hacer ya identificado) y auditoría (registrar qué hiciste). La relación es de medio a fin: AAA es el mecanismo con el que se consiguen los objetivos del CIA. Autenticar y autorizar protegen la confidencialidad y la integridad, porque impiden que alguien no autorizado lea o modifique; auditar permite detectar y reconstruir lo que pasó cuando algo falla. Confundirlos es error de examen porque la pregunta suele estar formulada como objetivos o como control de acceso, y responder la triada equivocada cuesta el punto entero."},
+
+{t:"seg",k:"ms",q:"Selecciona TODOS los componentes del triángulo CIA.",
+ o:["Confidencialidad","Integridad","Disponibilidad","Autenticación","Auditoría"],a:[0,1,2],
+ e:"CIA = Confidencialidad, Integridad, Disponibilidad. Autenticación y auditoría pertenecen a AAA, que es el mecanismo, no el objetivo."},
+
+{t:"seg",k:"mc",q:"Un sistema autentica correctamente a los usuarios pero no registra qué hace cada uno. ¿Qué parte de AAA falta y qué se compromete?",
+ o:["Falta la Auditoría; se compromete la capacidad de detectar y reconstruir violaciones a la integridad y confidencialidad","Falta la Autorización; se compromete la disponibilidad","Falta la Autenticación; se compromete la confidencialidad","No falta nada, la auditoría es opcional"],a:0,
+ e:"Sin auditoría no hay trazabilidad: si alguien altera o filtra datos, no hay forma de saber quién ni cuándo. Los logs son la base para detectar y reconstruir lo que pasó, y sin ellos un fallo en producción es imposible de investigar."},
+
+{t:"seg",k:"mc",q:"Un usuario inicia sesión correctamente pero al intentar borrar un registro recibe “permiso denegado”. ¿Qué pasó?",
+ o:["Está autenticado pero no autorizado para esa acción","Falló la autenticación","Falló la auditoría","Se rompió la confidencialidad"],a:0,
+ e:"Autenticación es la portería del edificio, que confirma que eres tú. Autorización es qué puertas abre tu tarjeta una vez adentro. Estar autenticado no implica poder hacer todo: un usuario válido puede tener prohibido borrar registros."},
+
+{t:"seg",k:"vf",q:"Estar autenticado en un sistema implica tener permiso para realizar cualquier operación en él.",a:false,
+ e:"Falso, y es el contraste más preguntado del tema. La autenticación verifica QUIÉN eres; la autorización verifica QUÉ puedes hacer. Son dos pasos distintos y consecutivos."},
+
+{t:"seg",k:"mc",q:"Un ataque de denegación de servicio (DoS) rompe principalmente:",
+ o:["La disponibilidad","La confidencialidad","La integridad","La autenticación"],a:0,
+ e:"Ejemplos de fallo de cada objetivo: una filtración de datos rompe la confidencialidad, una transacción alterada rompe la integridad, y un DoS rompe la disponibilidad."},
+
+{t:"seg",k:"mc",q:"Una transacción bancaria es modificada en tránsito por un atacante. ¿Qué objetivo del CIA se violó?",
+ o:["Integridad","Confidencialidad","Disponibilidad","Autorización"],a:0,
+ e:"La integridad es que nadie altere la información sin autorización. Si además el atacante pudo LEER la transacción, también se violó la confidencialidad. Se protegen ambas con cifrado en tránsito (TLS)."},
+
+{t:"seg",k:"ab",q:"¿Por qué el triángulo CIA tiene tres objetivos y no uno solo? Explica con un ejemplo por qué no se trata de maximizar cada uno.",
+ p:["Porque protegerlos entra en conflicto entre sí","Ejemplo: cifrar todo y apagar el servidor da confidencialidad perfecta y disponibilidad nula","Diseñar seguridad es EQUILIBRAR los tres, no maximizar uno","Cada control refuerza unos objetivos y puede debilitar otros"],
+ e:"Son tres porque protegerlos entra en conflicto: subir uno a tope suele bajar otro. El ejemplo del curso es contundente: si ciframos todo con la llave más fuerte posible y además apagamos el servidor, obtenemos confidencialidad perfecta y disponibilidad nula, y el sistema es inútil. Al revés, dejarlo abierto a todo el mundo maximiza la disponibilidad y destruye la confidencialidad. Por eso diseñar seguridad no es maximizar un objetivo sino equilibrar los tres según lo que el sistema realmente necesite, y por eso cada control de seguridad se evalúa por su efecto sobre los tres a la vez."},
+
+{t:"seg",k:"ms",q:"Selecciona TODOS los mecanismos que corresponden a la AUTENTICACIÓN.",
+ o:["Usuario y contraseña","MFA (autenticación multifactor)","Certificado digital","Roles y permisos","Logs de actividad"],a:[0,1,2],
+ e:"Autenticación verifica quién eres: contraseña, MFA, certificado. Los roles y permisos son AUTORIZACIÓN; los logs son AUDITORÍA."},
+
+{t:"seg",k:"mc",q:"¿Por qué la seguridad se vuelve una meta de diseño más exigente al distribuir un sistema?",
+ o:["Porque cada mensaje viaja por una red donde alguien puede escucharlo, modificarlo o suplantarte","Porque hay más usuarios simultáneos","Porque las contraseñas viajan sin cifrar por definición","Porque los sistemas distribuidos no soportan TLS"],a:0,
+ e:"En un sistema centralizado los datos no salen de la máquina. Al distribuir crece la superficie de ataque, y por eso se recurre a cifrado en tránsito (TLS), autenticación de ambos extremos y control de acceso."},
+
+{t:"seg",k:"vf",q:"La falacia de Deutsch “la red es segura” se manifiesta cuando un equipo no cifra ni autentica el tráfico entre sus servicios internos.",a:true,
+ e:"Verdadero. Es la falacia número 4. Si la crees, no ciframos ni autenticamos, y cualquiera en el camino puede leer o alterar los mensajes. Es la razón de que hoy se cifre también el tráfico interno entre servicios."},
+
+{t:"seg",k:"mc",q:"En la nube, ¿qué componente cumple el papel de firewall según el curso?",
+ o:["Los AWS Security Groups","El servidor DNS del proveedor","El balanceador de carga","El servicio de facturación"],a:0,
+ e:"Los Security Groups son firewall en la nube: reglas de entrada y salida por IP, puerto y protocolo. El firewall también puede vivir en el computador (Windows Defender, UFW) o en el router."},
+
+{t:"seg",k:"mc",q:"Un sistema cifra los datos en tránsito con TLS. ¿Qué objetivos del CIA está protegiendo?",
+ o:["Confidencialidad e integridad","Solo confidencialidad","Solo disponibilidad","Los tres por igual"],a:0,
+ e:"TLS protege confidencialidad (nadie lee el contenido en el camino) e integridad (nadie lo altera sin que se detecte). La disponibilidad se protege con otras técnicas: redundancia, autoescalado, mitigación de DoS."},
+
+{t:"seg",k:"mc",q:"En la triada AAA, la “A” de Accounting o Auditoría sirve para:",
+ o:["Registrar qué hizo cada usuario, con logs y trazabilidad","Contabilizar el costo de los recursos usados","Autorizar operaciones de alto riesgo","Autenticar con un segundo factor"],a:0,
+ e:"Auditoría es el registro de la actividad. Aunque “accounting” suene a contabilidad de consumo, en el contexto de control de acceso significa dejar registro de lo hecho, para poder detectar y reconstruir incidentes."},
+
+{t:"seg",k:"ms",q:"Un servicio público en Internet necesita proteger su DISPONIBILIDAD. Selecciona TODAS las medidas que apuntan a ese objetivo.",
+ o:["Redundancia de servidores","Autoescalado ante picos de carga","Réplicas en varias regiones","Cifrado del contenido con TLS","Roles y permisos por usuario"],a:[0,1,2],
+ e:"Disponibilidad se protege con redundancia, autoescalado y distribución geográfica. TLS protege confidencialidad e integridad; los roles y permisos son autorización, que apunta a confidencialidad e integridad."},
+
+{t:"seg",k:"mc",q:"Una empresa tiene un sistema que responde siempre, nunca se cae, pero de vez en cuando devuelve saldos incorrectos por réplicas desactualizadas. ¿Qué objetivo está fallando?",
+ o:["La integridad: los datos no son correctos aunque el servicio responda","La disponibilidad: el servicio no está operativo","La confidencialidad: alguien no autorizado ve los datos","Ninguno, es un problema de rendimiento"],a:0,
+ e:"Es el contraste entre disponibilidad y confiabilidad llevado al CIA. El servicio está disponible (responde) pero la información no llega íntegra y correcta, así que falla la integridad."},
+
+// ─── ATRIBUTOS NO FUNCIONALES ────────────────────────────────────────
+{t:"anf",k:"mc",q:"¿Qué distingue un requisito NO funcional de uno funcional?",
+ o:["El funcional dice QUÉ hace el sistema; el no funcional dice CÓMO debe hacerlo (calidad)","El no funcional es opcional y el funcional obligatorio","El no funcional se prueba y el funcional no","El funcional aplica al backend y el no funcional al frontend"],a:0,
+ e:"Dos sistemas pueden cumplir exactamente los mismos requisitos funcionales y ser radicalmente distintos en valor: los dos “guardan pedidos”, pero uno responde en 200 ms y aguanta 10.000 usuarios y el otro tarda 8 segundos y se cae con 50."},
+
+{t:"anf",k:"ab",q:"Una empresa quiere aguantar más carga y duda entre comprar un servidor el doble de potente o comprar dos servidores iguales al que tiene. Explica los dos caminos, sus nombres técnicos, y qué problema nuevo aparece con el segundo.",
+ p:["Servidor más potente = escalado VERTICAL: más CPU/RAM a la misma máquina","Es simple, pero tiene techo físico y deja un punto único de falla","Dos servidores = escalado HORIZONTAL: más máquinas","No tiene techo teórico y permite redundancia","Pero obliga a resolver todos los problemas de los sistemas distribuidos: sin memoria compartida, sin reloj global, concurrencia, fallas parciales"],
+ e:"Comprar un servidor el doble de potente es escalado vertical: agregar más CPU o RAM a la misma máquina. Es el camino simple porque no cambia la arquitectura y la aplicación sigue funcionando igual, pero tiene dos límites serios: hay un techo físico a cuánto hardware cabe en un servidor, el precio crece mucho más rápido que la potencia, y sigue habiendo un punto único de falla. Comprar dos servidores iguales es escalado horizontal: agregar más máquinas. No tiene techo teórico y además permite redundancia, porque si una cae la otra sigue. El problema nuevo es que en el momento en que hay dos máquinas se vuelve un sistema distribuido, y aparecen todas sus consecuencias: no comparten memoria, así que el estado ya no puede vivir en RAM; no hay reloj global; hay concurrencia real entre nodos; y aparecen las fallas parciales. Escalar horizontalmente no es solo comprar hardware, es cambiar cómo está diseñado el sistema."},
+
+{t:"anf",k:"mc",q:"Escalado vertical significa:",
+ o:["Agregar más CPU o RAM a la misma máquina; simple, pero con techo físico y punto único de falla","Agregar más máquinas al conjunto","Distribuir los datos entre varios nodos","Aumentar automáticamente los recursos según la demanda"],a:0,
+ e:"Vertical = más potencia a una máquina. Horizontal = más máquinas, sin techo teórico y con redundancia, pero obligando a resolver los problemas de los sistemas distribuidos."},
+
+{t:"anf",k:"mc",q:"Un sistema procesa 10.000 peticiones por segundo, pero cada petición individual tarda 2 segundos en responder. ¿Cómo se describe eso?",
+ o:["Throughput alto con latencia mala: son métricas distintas y pueden ir en direcciones opuestas","Es imposible, si el throughput es alto la latencia es baja","Es un problema de disponibilidad","Es un problema de escalabilidad vertical"],a:0,
+ e:"Latencia es el retraso de la comunicación o cuánto tarda una petición; throughput es cuántas se atienden por segundo. Un sistema que procesa en lotes grandes puede tener throughput altísimo y latencia pésima. Confundirlos es error típico."},
+
+{t:"anf",k:"ms",q:"Selecciona TODAS las métricas con las que el curso mide el RENDIMIENTO.",
+ o:["Tiempo de respuesta","Latencia","Throughput","Porcentaje de uptime anual","Número de nodos del clúster"],a:[0,1,2],
+ e:"Rendimiento se mide con tiempo de respuesta (cuánto tarda una operación completa), latencia (el retraso de la comunicación) y throughput (solicitudes por segundo). El uptime anual mide DISPONIBILIDAD, que es otro atributo."},
+
+{t:"anf",k:"mc",q:"Un servidor tiene 99,9 % de disponibilidad. ¿A cuánta caída al año equivale?",
+ o:["Aproximadamente 8,76 horas","Aproximadamente 3,65 días","Aproximadamente 52,6 minutos","Aproximadamente 1 hora"],a:0,
+ e:"La tabla del curso: 99 % (“dos nueves”) ≈ 3,65 días; 99,9 % (“tres nueves”) ≈ 8,76 horas; 99,99 % (“cuatro nueves”) ≈ 52,6 minutos. Es de los datos numéricos más preguntables."},
+
+{t:"anf",k:"mc",q:"¿Cuánta caída anual permite una disponibilidad del 99,99 %?",
+ o:["≈ 52,6 minutos","≈ 8,76 horas","≈ 3,65 días","≈ 5 horas"],a:0,
+ e:"Cuatro nueves ≈ 52,6 minutos al año. Cada nueve adicional cuesta mucho más que el anterior porque exige redundancia en más niveles; por eso la disponibilidad se NEGOCIA según lo que el negocio necesita, no se maximiza porque sí."},
+
+{t:"anf",k:"vf",q:"Siempre conviene diseñar para la máxima disponibilidad posible, porque más nueves siempre es mejor.",a:false,
+ e:"Falso. Cada nueve adicional cuesta mucho más que el anterior, porque exige redundancia en más niveles. La disponibilidad se negocia según lo que el negocio realmente necesita: un blog interno no necesita los mismos nueves que un sistema de pagos."},
+
+{t:"anf",k:"ms",q:"Selecciona los TRES pilares de la observabilidad.",
+ o:["Logs","Métricas","Trazas","Alertas","Respaldos"],a:[0,1,2],
+ e:"Logs = registro de eventos puntuales (qué pasó). Métricas = valores numéricos en el tiempo (cuánto y cuándo). Trazas = el recorrido completo de una petición a través de varios servicios (por dónde pasó y dónde se demoró)."},
+
+{t:"anf",k:"ab",q:"Tu aplicación empezó a responder lento. Tienes logs pero no trazas, y la petición pasa por 5 servicios distintos. Explica por qué eso es un problema y qué pilar de observabilidad necesitas.",
+ p:["Los logs son eventos puntuales por servicio, no muestran el recorrido completo","Con 5 servicios en máquinas distintas no puedes correlacionar los logs de una misma petición","No puedes saber cuál de los 5 fue el que se demoró","Necesitas TRAZAS: el recorrido completo de una petición a través de los servicios","Las trazas indican por dónde pasó y dónde se demoró"],
+ e:"Los logs registran eventos puntuales dentro de cada servicio, y cada servicio escribe los suyos por separado en su propia máquina. Con una petición que atraviesa 5 servicios, para reconstruir qué pasó tendrías que ir a 5 archivos de log distintos y adivinar cuáles líneas corresponden a TU petición entre miles de peticiones simultáneas, sin un identificador que las una. Peor aún, aunque las encontraras, los relojes de las máquinas no están sincronizados, así que ordenarlas por hora tampoco es fiable. Lo que necesitas son trazas: registran el recorrido completo de una petición a través de todos los servicios con un identificador común, y muestran cuánto tiempo pasó en cada salto. Por eso la observabilidad es crítica en sistemas distribuidos: en una sola máquina depuras leyendo un log, pero con 8 servicios sin trazas es imposible saber cuál falló o se demoró."},
+
+{t:"anf",k:"mc",q:"¿Qué pilar de la observabilidad responde “cuánto y cuándo” con valores numéricos en el tiempo?",
+ o:["Métricas","Logs","Trazas","Auditoría"],a:0,
+ e:"Métricas = valores numéricos en el tiempo (uso de CPU, peticiones por segundo, latencia p95). Logs = eventos puntuales (qué pasó). Trazas = recorrido de una petición entre servicios."},
+
+{t:"anf",k:"mc",q:"La observabilidad se define como:",
+ o:["La capacidad de conocer el estado interno del sistema desde afuera","La capacidad de que el sistema se recupere solo de las fallas","La proporción de tiempo que el sistema está operativo","La cantidad de usuarios que soporta"],a:0,
+ e:"Conocer el estado interno desde afuera, con logs, métricas y trazas. Es especialmente crítica en sistemas distribuidos porque no puedes entrar a depurar 8 máquinas a la vez."},
+
+{t:"anf",k:"mc",q:"¿Cuál de estos escenarios describe un problema de MANTENIBILIDAD y no de rendimiento?",
+ o:["Cada cambio pequeño obliga a modificar código en cinco módulos distintos y romper pruebas","La página tarda 8 segundos en cargar","El sistema se cae cuando llegan 500 usuarios","Los datos se corrompen al replicarse"],a:0,
+ e:"La mantenibilidad es qué tan fácil es cambiar y evolucionar el sistema. Los otros tres son rendimiento, escalabilidad y confiabilidad respectivamente. Los cuatro son atributos no funcionales, pero distintos."},
+
+{t:"anf",k:"vf",q:"La escalabilidad horizontal no tiene techo teórico, pero obliga a resolver todos los problemas propios de los sistemas distribuidos.",a:true,
+ e:"Verdadero. Es el intercambio central: la vertical es simple pero topa con un límite físico y deja un punto único de falla; la horizontal escala indefinidamente y da redundancia, pero en el momento en que hay dos máquinas aparecen las cuatro consecuencias de distribuir."},
+
+{t:"anf",k:"mc",q:"IaC (Infrastructure as Code) existe fundamentalmente porque:",
+ o:["La configuración manual no se puede repetir con exactitud, no queda registrada y depende de que alguien recuerde qué tocó","Los proveedores de nube no tienen consola web","Es más barato que configurar a mano","Permite programar en cualquier lenguaje"],a:0,
+ e:"Si el servidor se pierde, reconstruirlo manualmente es adivinar. Con IaC escribes en un archivo cómo debe verse la infraestructura y la herramienta la crea y la mantiene igual; el archivo se versiona en Git como cualquier código."},
+
+{t:"anf",k:"ms",q:"Selecciona TODAS las herramientas de Infraestructura como Código que menciona el curso.",
+ o:["Terraform","Ansible","CloudFormation","Pulumi","Kubernetes"],a:[0,1,2,3],
+ e:"Terraform, Ansible, CloudFormation y Pulumi son las herramientas de IaC del curso. Kubernetes es un orquestador de contenedores; se puede definir CON IaC, pero no es una herramienta de IaC en sí."},
+
+{t:"anf",k:"mc",q:"¿Qué ventaja de la nube hace posible directamente la IaC?",
+ o:["La recuperación rápida: reconstruir todo es volver a ejecutar el script","La reducción de CAPEX","El acceso ubicuo a la red","La agrupación de recursos"],a:0,
+ e:"Levantar la infraestructura en otra región toma minutos en vez de días porque su definición está en un archivo versionado. Sus beneficios son automatización, repetibilidad, menos errores humanos y mantenimiento sencillo."},
+
+{t:"anf",k:"mc",q:"Un “patrón” en arquitectura de software es:",
+ o:["Una solución reutilizable a un problema común de diseño; no es código listo sino la forma probada de resolverlo","Una plantilla de código que se copia y pega","Un estándar obligatorio de la industria","Un diagrama de la arquitectura"],a:0,
+ e:"Ejemplos del curso: MVC, Cliente-Servidor, Microservicios, Event Driven. Lo importante es que un patrón nombra una forma probada de resolver un problema recurrente, no una implementación concreta."},
+
+{t:"anf",k:"mc",q:"Un equipo mide que su servicio responde en 200 ms de promedio, pero cada vez que hay un pico de tráfico se cae. ¿Qué atributos están en juego?",
+ o:["Buen rendimiento pero mala escalabilidad y disponibilidad","Buena disponibilidad pero mal rendimiento","Buena confiabilidad pero mala observabilidad","Buena mantenibilidad pero mala seguridad"],a:0,
+ e:"El rendimiento describe qué tan rápido responde AHORA; la escalabilidad es cuánta carga soporta antes de romperse. Un sistema puede ser rápido con poca carga y no escalar en absoluto, y caerse afecta a la disponibilidad."},
+
+{t:"anf",k:"ms",q:"Selecciona TODOS los que son atributos no funcionales según el curso.",
+ o:["Escalabilidad","Rendimiento","Disponibilidad","Observabilidad","Seguridad","Registrar usuarios nuevos"],a:[0,1,2,3,4],
+ e:"Escalabilidad, rendimiento, disponibilidad, observabilidad, seguridad, mantenibilidad y tolerancia a fallos son atributos no funcionales: dicen CÓMO debe comportarse el sistema. “Registrar usuarios” es un requisito FUNCIONAL: dice qué hace."},
+
+{t:"anf",k:"vf",q:"Escalabilidad y rendimiento son el mismo atributo medido de dos formas.",a:false,
+ e:"Falso. El rendimiento es qué tan rápido responde ahora (latencia, throughput). La escalabilidad es cuánta carga soporta antes de degradarse. Un sistema rápido con 10 usuarios puede ser incapaz de escalar a 10.000."},
+
+{t:"anf",k:"mc",q:"¿Por qué la observabilidad es más crítica en un sistema distribuido que en uno de una sola máquina?",
+ o:["Porque una petición atraviesa varios servicios en máquinas distintas y sin trazas es imposible saber cuál falló o se demoró","Porque los sistemas distribuidos generan menos logs","Porque los sistemas distribuidos no tienen consola","Porque los relojes de los nodos están sincronizados"],a:0,
+ e:"En una sola máquina puedes depurar leyendo un log. Con 8 servicios en máquinas distintas, y sin reloj global que permita ordenar los eventos, hacen falta trazas con un identificador común para reconstruir el recorrido."},
+
+// ─── CONCEPTOS BÁSICOS Y PRELIMINARES ────────────────────────────────
+{t:"base",k:"mc",q:"¿Cuál es la diferencia entre un programa y un proceso?",
+ o:["El programa es el archivo estático en disco; el proceso es ese programa EJECUTÁNDOSE, con memoria, estado y PID","El programa está compilado y el proceso interpretado","El proceso es más pequeño que el programa","Son sinónimos en sistemas distribuidos"],a:0,
+ e:"El programa es la receta; el proceso es alguien efectivamente cocinando. De un mismo programa pueden nacer varios procesos a la vez, cada uno con su propia memoria: por eso puedes abrir tres ventanas del mismo navegador y que una se cierre sin tumbar las otras."},
+
+{t:"base",k:"ab",q:"Explica la cadena programa → proceso → mensaje → paquete como una secuencia, no como cuatro definiciones sueltas.",
+ p:["El programa es código estático en disco; no está haciendo nada","Al ejecutarse se convierte en proceso, con memoria asignada, estado y PID, gestionado por el SO","Como los procesos en máquinas distintas no comparten memoria, se comunican mediante mensajes","El mensaje es la unidad de comunicación: la información completa que un proceso le hace llegar a otro","El mensaje se parte en paquetes del tamaño adecuado para viajar por la red, y se reensambla al llegar"],
+ e:"Es la cadena completa de cómo dos programas en máquinas distintas terminan hablándose. Todo empieza con el programa: el código que se escribió y se compiló, un archivo estático en disco que no está haciendo nada. Cuando se ejecuta se convierte en proceso: lo dinámico, con memoria asignada, un estado, un identificador PID, y gestionado por el sistema operativo. Un sistema distribuido es, por definición, procesos que se comunican. Como los procesos en máquinas distintas no comparten memoria, la única forma de coordinarse es enviándose mensajes, que son la unidad de comunicación: la información completa que un proceso le quiere hacer llegar a otro. Y como mandar un mensaje grande de una sola pieza es mala idea, el mensaje se parte en paquetes del tamaño adecuado para viajar por la red, que se reensamblan del otro lado. De ahí sale que los paquetes puedan tomar rutas distintas y llegar desordenados o no llegar."},
+
+{t:"base",k:"mc",q:"¿Por qué un mensaje se parte en paquetes en lugar de viajar entero?",
+ o:["Si se corrompe, solo se retransmite el pedazo dañado, y varios mensajes pueden compartir el enlace intercalándose","Porque los mensajes no pueden superar los 64 KB","Porque cada paquete se cifra con una llave distinta","Porque el sistema operativo no permite mensajes grandes"],a:0,
+ e:"Un mensaje grande como pieza única obligaría a retransmitirlo entero ante cualquier error y bloquearía el enlace para los demás. El error típico es decir que un paquete es lo mismo que un mensaje: el mensaje SE COMPONE DE varios paquetes."},
+
+{t:"base",k:"vf",q:"De un mismo programa pueden nacer varios procesos a la vez, cada uno con su propia memoria.",a:true,
+ e:"Verdadero. Por eso puedes abrir tres ventanas del mismo navegador y que una se cierre sin tumbar las otras: son procesos distintos, con memoria propia, aunque vengan del mismo ejecutable."},
+
+{t:"base",k:"mc",q:"¿Cuál es la diferencia entre un compilador y un intérprete?",
+ o:["El compilador traduce todo de una vez y genera un ejecutable (C, Java); el intérprete traduce y ejecuta línea por línea en tiempo real (Python, JavaScript)","El compilador es más moderno que el intérprete","El intérprete genera código máquina y el compilador no","El compilador solo funciona en Linux"],a:0,
+ e:"Ambos traducen código fuente a algo que la máquina ejecuta; lo que cambia es cuándo y cómo. El compilador produce un artefacto ejecutable de antemano; el intérprete traduce sobre la marcha."},
+
+{t:"base",k:"mc",q:"Una API es, en la definición del curso:",
+ o:["El contrato que expone un componente para que otros lo usen sin conocer su interior","Un servidor que responde peticiones HTTP","Una librería de funciones para programar","Un formato de intercambio de datos como JSON"],a:0,
+ e:"Define qué operaciones ofrece, qué recibe y qué devuelve. Es lo que hace posible la APERTURA y la HETEROGENEIDAD en sistemas distribuidos: dos servicios escritos en lenguajes distintos se integran porque respetan la misma API."},
+
+{t:"base",k:"ms",q:"Selecciona los TRES servicios de TI fundamentales que cualquier infraestructura provee y que se alquilan en la nube.",
+ o:["Cómputo (CPU)","Almacenamiento (disco)","Red","Seguridad","Soporte técnico"],a:[0,1,2],
+ e:"Cómputo, almacenamiento y red. Toda oferta de nube, por compleja que parezca, se reduce a vender combinaciones de estos tres. El almacenamiento puede ser estructurado (bases de datos) o sistema de archivos (carpetas y archivos)."},
+
+{t:"base",k:"mc",q:"Un data center es:",
+ o:["Una instalación física que aloja servidores, almacenamiento y red, con energía y refrigeración redundantes","Un servidor muy potente","El software que administra los recursos de un servidor","Una red de área extensa"],a:0,
+ e:"On-premise significa que ese datacenter está en las instalaciones de la propia organización, en contraste con estar en la nube. Ojo: on-premise no es lo mismo que nube privada."},
+
+{t:"base",k:"mc",q:"¿Qué son los “requerimientos de ejecución” de un programa y qué tecnología los vino a empaquetar?",
+ o:["Lo que necesita para correr (versión de SO, librerías, runtime, memoria mínima); los contenedores (Docker) los empaquetan","Los permisos de usuario; los resuelve AAA","El ancho de banda mínimo; lo resuelve la CDN","El presupuesto del proyecto; lo resuelve OPEX"],a:0,
+ e:"Los contenedores empaquetan el programa junto con todo lo que necesita para correr, para que “funciona en mi máquina” deje de ser un problema. Se entregan como cómputo en la nube (Docker, Kubernetes)."},
+
+{t:"base",k:"mc",q:"Los logs o bitácoras son, según el curso:",
+ o:["El registro de los eventos que ocurren en un sistema; la base de la observabilidad","Copias de seguridad de la base de datos","El historial de navegación del usuario","Los archivos de configuración del servidor"],a:0,
+ e:"Sin logs, un fallo en producción es imposible de reconstruir. Son uno de los tres pilares de la observabilidad, junto con métricas y trazas, y también son el soporte de la Auditoría en la triada AAA."},
+
+{t:"base",k:"mc",q:"El sistema operativo, en la definición del curso, es:",
+ o:["El software que administra el hardware y les reparte recursos (CPU, memoria, disco, red) a los procesos","El programa principal de la aplicación","La capa que traduce nombres a direcciones IP","El entorno donde se compila el código fuente"],a:0,
+ e:"Es quien decide qué proceso corre y cuándo. Por eso el proceso, a diferencia del programa, tiene memoria asignada, estado y PID: todo eso se lo da el sistema operativo."},
+
+{t:"base",k:"vf",q:"El almacenamiento puede ser estructurado (bases de datos) o de sistema de archivos (carpetas y archivos).",a:true,
+ e:"Verdadero. Es la división del curso dentro de los servicios de TI. El almacenamiento estructurado son bases de datos; el de sistema de archivos son carpetas y archivos."},
+
+//BANK_END
+];
+
+const TOPICS = {
+  sd:"Sistemas distribuidos", nube:"Computación en la nube", redes:"Redes de datos",
+  seg:"Seguridad (CIA/AAA)", anf:"Atributos no funcionales", base:"Conceptos básicos"
+};
+const KINDS = {mc:"Opción múltiple", vf:"Verdadero / falso", ms:"Selección múltiple", ab:"Abierta"};
+
+const $ = s => document.querySelector(s);
+const shuffle = a => a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(p=>p[1]);
+const store = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem("sim1_"+k)) ?? d }catch(e){ return d } },
+  set(k,v){ try{ localStorage.setItem("sim1_"+k, JSON.stringify(v)) }catch(e){} }
+};
+
+let ex=[], i=0, t0=0, tick=null, feedback=false;
+
+// Muestreo ponderado sin reemplazo (Efraimidis-Spirakis): peso = 1 + veces fallada
+function pick(n){
+  const fails = store.get("fallos",{});
+  const useW = $("#mFallos").checked;
+  const byTopic = {};
+  BANK.forEach((q,id)=>{ (byTopic[q.t] = byTopic[q.t]||[]).push(id) });
+  const out=[];
+  for(const t in byTopic){
+    const pool = byTopic[t];
+    const take = Math.min(pool.length, Math.round(n * pool.length / BANK.length));
+    const keyed = pool.map(id=>{
+      const w = useW ? 1 + (fails[id]||0)*1.5 : 1;
+      return [Math.pow(Math.random(), 1/w), id];
+    }).sort((a,b)=>b[0]-a[0]);
+    out.push(...keyed.slice(0,take).map(p=>p[1]));
+  }
+  // ajuste por redondeo
+  const rest = shuffle(BANK.map((_,id)=>id).filter(id=>!out.includes(id)));
+  while(out.length < Math.min(n,BANK.length)) out.push(rest.pop());
+  return shuffle(out).slice(0,n).map(id=>{
+    const q = BANK[id];
+    const s = {id, q, ans:null, grade:null, shown:false};
+    if(q.k==="mc"||q.k==="ms"){
+      s.order = shuffle(q.o.map((_,j)=>j));
+    }
+    return s;
+  });
+}
+
+function correct(s){
+  const q = s.q;
+  // en las abiertas la nota es la autocalificación, no el contenido del textarea
+  if(q.k==="ab") return s.grade ?? 0;
+  if(s.ans===null) return 0;
+  if(q.k==="mc") return s.order[s.ans]===q.a ? 1 : 0;
+  if(q.k==="vf") return s.ans===q.a ? 1 : 0;
+  if(q.k==="ms"){
+    const got = s.ans.map(x=>s.order[x]).sort((a,b)=>a-b).join(",");
+    return got === q.a.slice().sort((a,b)=>a-b).join(",") ? 1 : 0;
+  }
+  if(q.k==="ab") return s.grade ?? 0;
+  return 0;
+}
+
+function render(){
+  const s = ex[i], q = s.q;
+  $("#qn").textContent = i+1;
+  $("#qt").textContent = ex.length;
+  $("#qtag").textContent = TOPICS[q.t];
+  $("#qtext").innerHTML = q.q;
+  $("#rail").style.width = ((i)/ex.length*100)+"%";
+  $("#prev").disabled = i===0;
+  $("#next").textContent = i===ex.length-1 ? "Terminar" : "Siguiente →";
+  const body = $("#qbody"), rev = $("#qreveal");
+  body.innerHTML=""; rev.innerHTML="";
+
+  if(q.k==="mc" || q.k==="ms" || q.k==="vf"){
+    const opts = document.createElement("div"); opts.className="opts";
+    const list = q.k==="vf" ? ["Verdadero","Falso"] : s.order.map(j=>q.o[j]);
+    list.forEach((txt,idx)=>{
+      const b = document.createElement("button");
+      b.className="opt"; b.type="button";
+      b.innerHTML = '<span class="k">'+(q.k==="vf"?(idx?"F":"V"):"ABCDEF"[idx])+'</span><span>'+txt+'</span>';
+      const chosen = q.k==="ms" ? (s.ans||[]).includes(idx)
+                   : q.k==="vf" ? (s.ans === (idx===0)) : s.ans===idx;
+      if(chosen) b.classList.add("sel");
+      b.onclick = ()=>{
+        if(s.shown) return;
+        if(q.k==="ms"){
+          s.ans = s.ans||[];
+          s.ans = s.ans.includes(idx) ? s.ans.filter(x=>x!==idx) : s.ans.concat(idx);
+        } else if(q.k==="vf"){ s.ans = idx===0; }
+        else { s.ans = idx; }
+        if(feedback && q.k!=="ms") showAnswer();
+        else render();
+      };
+      opts.appendChild(b);
+    });
+    body.appendChild(opts);
+    if(q.k==="ms"){
+      const hint = document.createElement("p");
+      hint.className="mono"; hint.style.cssText="font-size:.75rem;color:var(--ink-3);margin:.7rem 0 0";
+      hint.textContent = "Varias correctas. Se califica todo o nada.";
+      body.appendChild(hint);
+      if(feedback && !s.shown){
+        const b=document.createElement("button"); b.className="btn btn-ghost"; b.style.marginTop=".8rem";
+        b.textContent="Comprobar"; b.onclick=showAnswer; body.appendChild(b);
+      }
+    }
+  }
+
+  if(q.k==="ab"){
+    const ta = document.createElement("textarea");
+    ta.placeholder = "Escribe tu respuesta con tus palabras. Nadie la lee: el punto es obligarte a producirla, no a reconocerla.";
+    ta.value = s.ans || "";
+    ta.oninput = ()=>{ s.ans = ta.value };
+    ta.disabled = s.shown;
+    body.appendChild(ta);
+    if(!s.shown){
+      const b = document.createElement("button");
+      b.className="btn btn-ghost"; b.style.marginTop=".9rem";
+      b.textContent = "Ver respuesta modelo";
+      b.onclick = showAnswer;
+      body.appendChild(b);
+    }
+  }
+  if(s.shown) paint();
+}
+
+function showAnswer(){ ex[i].shown = true; render(); }
+
+function paint(){
+  const s = ex[i], q = s.q, rev = $("#qreveal");
+  if(q.k==="mc"||q.k==="ms"||q.k==="vf"){
+    [...$("#qbody").querySelectorAll(".opt")].forEach((b,idx)=>{
+      b.classList.remove("sel");
+      const real = q.k==="vf" ? (idx===0) : s.order[idx];
+      const isRight = q.k==="vf" ? real===q.a : q.k==="ms" ? q.a.includes(real) : real===q.a;
+      const chosen = q.k==="ms" ? (s.ans||[]).includes(idx)
+                   : q.k==="vf" ? (s.ans===(idx===0)) : s.ans===idx;
+      if(isRight) b.classList.add("ok");
+      else if(chosen) b.classList.add("bad");
+    });
+  }
+  let html = '<div class="reveal">';
+  if(q.k==="ab"){
+    html += '<h3>Respuesta modelo</h3><p>'+q.e+'</p>';
+    html += '<h3>Tenía que aparecer</h3><ul>'+q.p.map(x=>'<li>'+x+'</li>').join("")+'</ul>';
+    html += '<h3>¿Cuánto de eso escribiste?</h3><div class="grade">'
+         +  '<button data-g="1">Lo cubrí</button><button data-g="0.5">A medias</button><button data-g="0">No</button></div>';
+  } else {
+    html += '<h3>'+(correct(s)?"Correcto":"Incorrecto")+'</h3><p>'+q.e+'</p>';
+  }
+  html += '</div>';
+  rev.innerHTML = html;
+  rev.querySelectorAll(".grade button").forEach(b=>{
+    if(s.grade!==null && String(s.grade)===b.dataset.g) b.classList.add("on");
+    b.onclick = ()=>{ s.grade = parseFloat(b.dataset.g); paint(); };
+  });
+}
+
+$("#next").onclick = ()=>{
+  const s = ex[i];
+  if(!feedback && s.q.k!=="ab") s.shown = false;
+  if(i === ex.length-1) return finish();
+  i++; render();
+};
+$("#prev").onclick = ()=>{ if(i>0){ i--; render(); } };
+
+document.addEventListener("keydown", e=>{
+  if($("#quiz").classList.contains("hidden")) return;
+  if(e.target.tagName==="TEXTAREA") return;
+  const n = parseInt(e.key);
+  const btns = $("#qbody").querySelectorAll(".opt");
+  if(n>=1 && n<=btns.length) btns[n-1].click();
+  if(e.key==="Enter" || e.key==="ArrowRight") $("#next").click();
+  if(e.key==="ArrowLeft") $("#prev").click();
+});
+
+function finish(){
+  clearInterval(tick);
+  const secs = Math.floor((Date.now()-t0)/1000);
+  const fails = store.get("fallos",{});
+  let pts=0;
+  const byT={}, byK={};
+  ex.forEach(s=>{
+    const c = correct(s); pts += c;
+    const t=s.q.t, k=s.q.k;
+    byT[t]=byT[t]||{c:0,n:0}; byT[t].c+=c; byT[t].n++;
+    byK[k]=byK[k]||{c:0,n:0}; byK[k].c+=c; byK[k].n++;
+    if(c<1) fails[s.id] = (fails[s.id]||0)+1;
+    else if(fails[s.id]) fails[s.id] = Math.max(0, fails[s.id]-1);
+  });
+  store.set("fallos", fails);
+  const pct = Math.round(pts/ex.length*100);
+  const hist = store.get("hist",[]); hist.push({d:Date.now(),p:pct,n:ex.length});
+  store.set("hist", hist.slice(-20));
+
+  const cls = p => p>=80?"g":p>=60?"y":"r";
+  const row = (name,o) => {
+    const p = Math.round(o.c/o.n*100);
+    return '<tr><td>'+name+'</td><td class="n">'+(Math.round(o.c*10)/10)+'/'+o.n+'</td>'
+      + '<td style="width:40%"><div class="bar '+cls(p)+'"><i style="width:'+p+'%"></i></div></td>'
+      + '<td class="n">'+p+'%</td></tr>';
+  };
+  const ranked = Object.entries(byT).sort((a,b)=> a[1].c/a[1].n - b[1].c/b[1].n);
+  const weak = ranked.filter(([,o])=> o.c/o.n < 0.8);
+
+  const wrong = ex.filter(s=>correct(s)<1);
+  const revHtml = wrong.map(s=>{
+    const q=s.q; let mine="(sin responder)";
+    if(q.k==="mc" && s.ans!==null) mine = q.o[s.order[s.ans]];
+    if(q.k==="vf" && s.ans!==null) mine = s.ans?"Verdadero":"Falso";
+    if(q.k==="ms" && s.ans) mine = s.ans.map(x=>q.o[s.order[x]]).join(" · ")||"(nada)";
+    if(q.k==="ab") mine = s.grade===null ? "(sin calificar)" : "Te calificaste "+(s.grade===0.5?"a medias":"mal");
+    let right="";
+    if(q.k==="mc") right = q.o[q.a];
+    if(q.k==="vf") right = q.a?"Verdadero":"Falso";
+    if(q.k==="ms") right = q.a.map(j=>q.o[j]).join(" · ");
+    return '<div class="rev"><div class="eyebrow">'+TOPICS[q.t]+' · '+KINDS[q.k]+'</div>'
+      + '<p class="qq">'+q.q+'</p>'
+      + '<p class="you">Tú: '+mine+'</p>'
+      + (right?'<p class="right">Correcta: '+right+'</p>':'')
+      + '<p class="why">'+(q.k==="ab"?q.e:q.e)+'</p></div>';
+  }).join("");
+
+  $("#quiz").classList.add("hidden");
+  $("#rail").style.width="100%";
+  const r = $("#results");
+  r.classList.remove("hidden");
+  r.innerHTML =
+    '<div class="eyebrow">Resultado</div>'
+  + '<div class="score">'+pct+'<small>%</small></div>'
+  + '<p class="lede" style="margin-top:.6rem">'+(Math.round(pts*10)/10)+' de '+ex.length+' · '
+  + String(Math.floor(secs/60)).padStart(2,"0")+':'+String(secs%60).padStart(2,"0")
+  + ' · '+Math.round(secs/ex.length)+' s por pregunta</p>'
+
+  + '<div class="card stack"><div><h2>Por tema</h2><div class="tscroll"><table><thead><tr><th>Tema</th><th class="n">Aciertos</th><th></th><th class="n">%</th></tr></thead><tbody>'
+  + ranked.map(([t,o])=>row(TOPICS[t],o)).join("")
+  + '</tbody></table></div></div>'
+  + '<div><h2>Por tipo de pregunta</h2><div class="tscroll"><table><tbody>'
+  + Object.entries(byK).sort((a,b)=>a[1].c/a[1].n-b[1].c/b[1].n).map(([k,o])=>row(KINDS[k],o)).join("")
+  + '</tbody></table></div></div></div>'
+
+  + '<div class="card" style="margin-top:1.25rem"><h2>Qué mejorar</h2>'
+  + (weak.length
+      ? '<p style="color:var(--ink-2);font-size:.96rem;margin-bottom:.8rem">En orden: empieza por arriba.</p><ol style="padding-left:1.2rem;color:var(--ink-2);margin:0">'
+        + weak.map(([t,o])=>'<li style="margin-bottom:.5rem"><b style="color:var(--ink)">'+TOPICS[t]+'</b> — '+Math.round(o.c/o.n*100)+'%. Vuelve a la nota antes de repetir el simulacro.</li>').join("")
+        + '</ol>'
+      : '<p style="color:var(--ok);margin:0">Ningún tema por debajo del 80 %. Repite en 2 días para consolidar.</p>')
+  + '</div>'
+
+  + (wrong.length ? '<div class="card" style="margin-top:1.25rem"><h2>Las que fallaste ('+wrong.length+')</h2>'+revHtml+'</div>' : '')
+
+  + '<div class="nav"><button class="btn btn-ghost" onclick="location.reload()">Volver al inicio</button>'
+  + '<button class="btn" id="again">Otro intento</button></div>';
+  $("#again").onclick = ()=>{ location.reload() };
+  window.scrollTo(0,0);
+}
+
+$("#go").onclick = ()=>{
+  feedback = $("#mFeedback").checked;
+  ex = pick(parseInt($("#nq").value));
+  i = 0; t0 = Date.now();
+  tick = setInterval(()=>{
+    const s = Math.floor((Date.now()-t0)/1000);
+    $("#clock").textContent = String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+  }, 1000);
+  $("#start").classList.add("hidden");
+  $("#quiz").classList.remove("hidden");
+  render();
+};
+
+$("#bankn").textContent = BANK.length;
+(function(){
+  const h = store.get("hist",[]);
+  if(!h.length) return;
+  const last = h.slice(-5).reverse().map(x=>x.p+"%").join(" · ");
+  const best = Math.max(...h.map(x=>x.p));
+  $("#hist").textContent = "Intentos: "+h.length+" · Últimos: "+last+" · Mejor: "+best+"%";
+})();
+</script>
