@@ -242,4 +242,3 @@ git push
 
 El propósito de este repositorio es construir, entre todos, un **material de estudio organizado, colaborativo y fácil de consultar**, reuniendo diferentes formas de tomar notas y registrar lo visto durante las clases.
 
-La idea no es reemplazar la asistencia ni el trabajo individual de cada estudiante, sino complementar el proceso de estudio con los aportes del grupo.
